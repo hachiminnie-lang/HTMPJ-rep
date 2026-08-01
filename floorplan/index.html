@@ -1,0 +1,843 @@
+<title>インダストリアルな1LDK ｜ 写真からの推定間取り図</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  :root{
+    --ground:#EFEEE8; --surface:#F7F6F1; --board:#EDEBE4;
+    --ink:#22201B; --ink-2:#56534B; --ink-3:#857F73;
+    --rule:#D6D2C7; --rule-soft:#E4E1D8;
+    --accent:#3F6670; --accent-ink:#2E4C55; --accent-soft:rgba(63,102,112,.10);
+
+    --w-board:#EDEBE4; --w-wall:#2A2823; --w-line:#55524A; --w-line-soft:#8C8880;
+    --w-floor-wood:#DFCDB4; --w-floor-mortar:#CFCCC2; --w-floor-tile:#E2E1DA;
+    --w-floor-bath:#DCE3E1; --w-balcony:#DAD8CF; --w-plank:#C9AF8E;
+    --w-dim:#7A776D; --w-label:#23211C; --w-sub:#6E6B62; --w-accent:#3F6670;
+
+    --f-display:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP","Songti SC","Iowan Old Style",Georgia,serif;
+    --f-body:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP","Helvetica Neue",Arial,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+
+    --shell:min(1120px, 92vw);
+    --read:38rem;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#171714; --surface:#1F1F1B; --board:#1F1F1C;
+      --ink:#EDEBE2; --ink-2:#A8A499; --ink-3:#7C766B;
+      --rule:#33332C; --rule-soft:#282821;
+      --accent:#86B7C2; --accent-ink:#A9CDD5; --accent-soft:rgba(134,183,194,.13);
+
+      --w-board:#1F1F1C; --w-wall:#E8E5DB; --w-line:#A5A196; --w-line-soft:#6E6B62;
+      --w-floor-wood:#3B342B; --w-floor-mortar:#35342F; --w-floor-tile:#2C2C28;
+      --w-floor-bath:#26302F; --w-balcony:#292824; --w-plank:#4A4034;
+      --w-dim:#8A867B; --w-label:#EFEDE4; --w-sub:#A5A196; --w-accent:#86B7C2;
+    }
+  }
+  :root[data-theme="light"]{
+    --ground:#EFEEE8; --surface:#F7F6F1; --board:#EDEBE4;
+    --ink:#22201B; --ink-2:#56534B; --ink-3:#857F73;
+    --rule:#D6D2C7; --rule-soft:#E4E1D8;
+    --accent:#3F6670; --accent-ink:#2E4C55; --accent-soft:rgba(63,102,112,.10);
+    --w-board:#EDEBE4; --w-wall:#2A2823; --w-line:#55524A; --w-line-soft:#8C8880;
+    --w-floor-wood:#DFCDB4; --w-floor-mortar:#CFCCC2; --w-floor-tile:#E2E1DA;
+    --w-floor-bath:#DCE3E1; --w-balcony:#DAD8CF; --w-plank:#C9AF8E;
+    --w-dim:#7A776D; --w-label:#23211C; --w-sub:#6E6B62; --w-accent:#3F6670;
+  }
+  :root[data-theme="dark"]{
+    --ground:#171714; --surface:#1F1F1B; --board:#1F1F1C;
+    --ink:#EDEBE2; --ink-2:#A8A499; --ink-3:#7C766B;
+    --rule:#33332C; --rule-soft:#282821;
+    --accent:#86B7C2; --accent-ink:#A9CDD5; --accent-soft:rgba(134,183,194,.13);
+    --w-board:#1F1F1C; --w-wall:#E8E5DB; --w-line:#A5A196; --w-line-soft:#6E6B62;
+    --w-floor-wood:#3B342B; --w-floor-mortar:#35342F; --w-floor-tile:#2C2C28;
+    --w-floor-bath:#26302F; --w-balcony:#292824; --w-plank:#4A4034;
+    --w-dim:#8A867B; --w-label:#EFEDE4; --w-sub:#A5A196; --w-accent:#86B7C2;
+  }
+
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:16px; line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  .shell{ width:var(--shell); margin-inline:auto; }
+  .stack{ display:flex; flex-direction:column; }
+
+  .eyebrow{
+    font-family:var(--f-mono); font-size:.7rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--accent-ink); margin:0;
+  }
+  h1{
+    font-family:var(--f-display); font-weight:600;
+    font-size:clamp(1.9rem, 5.2vw, 3rem); line-height:1.28;
+    letter-spacing:.02em; text-wrap:balance; margin:0;
+  }
+  h2{
+    font-family:var(--f-display); font-weight:600;
+    font-size:clamp(1.15rem, 2.4vw, 1.4rem); line-height:1.5;
+    letter-spacing:.04em; text-wrap:balance; margin:0;
+  }
+  h3{ font-size:.95rem; font-weight:600; letter-spacing:.04em; margin:0; }
+  p{ margin:0; max-width:var(--read); color:var(--ink-2); }
+  p.lede{ color:var(--ink); font-size:1.02rem; }
+
+  /* ---------- header ---------- */
+  .masthead{ padding:clamp(3rem,8vw,5.5rem) 0 clamp(2rem,5vw,3rem); gap:1.25rem; }
+  .masthead .stack{ gap:1.1rem; }
+
+  .facts{
+    display:flex; flex-wrap:wrap; gap:0;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    margin-top:.5rem;
+  }
+  .fact{ padding:.9rem 1.5rem .9rem 0; margin-right:1.5rem; border-right:1px solid var(--rule-soft); }
+  .fact:last-child{ border-right:0; margin-right:0; }
+  .fact dt{
+    font-family:var(--f-mono); font-size:.66rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 .15rem;
+  }
+  .fact dd{ margin:0; font-size:1.02rem; font-weight:600; font-variant-numeric:tabular-nums; }
+  .fact dd small{ font-weight:400; font-size:.8rem; color:var(--ink-3); margin-left:.15rem; }
+
+  /* ---------- plan ---------- */
+  .planwrap{
+    background:var(--board); border:1px solid var(--rule);
+    padding:clamp(1rem,3vw,2.25rem); margin:0;
+    display:flex; flex-direction:column; align-items:center; gap:1.25rem;
+    overflow-x:auto;
+  }
+  .planwrap svg{ display:block; width:100%; max-width:760px; height:auto; }
+  figcaption{
+    font-size:.8rem; color:var(--ink-3); line-height:1.7;
+    max-width:var(--read); text-align:center; margin:0;
+  }
+
+  .legend{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(148px,1fr));
+    gap:.55rem 1.5rem; width:100%; max-width:760px;
+    padding-top:1.1rem; border-top:1px solid var(--rule-soft);
+  }
+  .legend div{ display:flex; align-items:center; gap:.55rem; font-size:.78rem; color:var(--ink-2); }
+  .sw{ width:1.35rem; height:.95rem; border:1px solid var(--w-line-soft); flex:none; }
+
+  /* ---------- sections ---------- */
+  section{ padding:clamp(2.75rem,7vw,4.5rem) 0; border-top:1px solid var(--rule); }
+  .sechead{ display:flex; flex-direction:column; gap:.6rem; margin-bottom:2rem; }
+
+  /* ---------- photo keys ---------- */
+  .keys{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; }
+  .keys li{ border-top:1px solid var(--rule-soft); }
+  .keys li:first-child{ border-top:0; }
+  .key{
+    display:grid; grid-template-columns:2.4rem 1fr; gap:0 1.25rem;
+    padding:1.4rem 0; width:100%; text-align:left;
+    background:none; border:0; color:inherit; font:inherit; cursor:pointer;
+    transition:background-color .2s ease;
+  }
+  .key:hover, .key:focus-visible{ background:var(--accent-soft); }
+  .key:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .keynum{
+    width:2.05rem; height:2.05rem; border-radius:50%; background:var(--accent);
+    color:var(--board); display:grid; place-items:center;
+    font-family:var(--f-mono); font-size:.92rem; font-weight:700; margin-top:.1rem;
+  }
+  .keybody{ display:flex; flex-direction:column; gap:.35rem; min-width:0; }
+  .keytitle{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.5rem .75rem; }
+  .keyroom{ font-family:var(--f-display); font-size:1.1rem; font-weight:600; letter-spacing:.03em; }
+  .keyfile{ font-family:var(--f-mono); font-size:.68rem; color:var(--ink-3); letter-spacing:.06em; }
+  .keybody p{ font-size:.92rem; max-width:44rem; }
+  .reads{ list-style:none; padding:0; margin:.15rem 0 0; display:flex; flex-wrap:wrap; gap:.35rem .45rem; }
+  .reads li{
+    border:1px solid var(--rule); border-radius:999px; padding:.12rem .6rem;
+    font-size:.74rem; color:var(--ink-2); line-height:1.6;
+  }
+
+  /* ---------- table ---------- */
+  .tablewrap{ overflow-x:auto; }
+  table{ border-collapse:collapse; width:100%; min-width:30rem; font-variant-numeric:tabular-nums; }
+  caption{ text-align:left; font-size:.8rem; color:var(--ink-3); padding-bottom:.6rem; }
+  th, td{ padding:.6rem .9rem .6rem 0; text-align:left; border-bottom:1px solid var(--rule-soft); font-size:.92rem; }
+  thead th{
+    font-family:var(--f-mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-3); font-weight:500; border-bottom:1px solid var(--rule); white-space:nowrap;
+  }
+  td.num, th.num{ text-align:right; padding-right:1.4rem; }
+  tbody tr:last-child td{ border-bottom:1px solid var(--rule); }
+  tfoot td{ font-weight:600; border-bottom:0; padding-top:.75rem; }
+  td .sub{ color:var(--ink-3); font-size:.8rem; }
+
+  /* ---------- confidence ---------- */
+  .tiers{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap:1.75rem 2.5rem; }
+  .tier{ display:flex; flex-direction:column; gap:.7rem; }
+  .tierhead{ display:flex; align-items:center; gap:.6rem; }
+  .bars{ display:flex; gap:3px; }
+  .bar{ width:1.1rem; height:.3rem; background:var(--rule); }
+  .bar.on{ background:var(--accent); }
+  .tier ul{ margin:0; padding-left:1.1rem; display:flex; flex-direction:column; gap:.4rem; }
+  .tier li{ font-size:.88rem; color:var(--ink-2); line-height:1.7; }
+
+  footer{
+    border-top:1px solid var(--rule); padding:2.25rem 0 3.5rem;
+    font-size:.78rem; color:var(--ink-3); line-height:1.8;
+  }
+  footer p{ font-size:.78rem; color:var(--ink-3); max-width:var(--read); }
+
+  /* A floor plan stops being readable below a certain size, so on narrow
+     screens it keeps a minimum width and scrolls inside its own frame. */
+  @media (max-width: 700px){
+    .planwrap svg{ min-width:440px; }
+    .planwrap{ align-items:flex-start; }
+    figcaption, .legend{ position:sticky; left:0; }
+    figcaption{ font-size:.76rem; text-align:left; }
+  }
+  @media (max-width: 640px){
+    .fact{ padding-right:1.1rem; margin-right:1.1rem; }
+    .key{ grid-template-columns:2rem 1fr; gap:0 .9rem; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+
+<header class="masthead shell">
+  <div class="stack">
+    <p class="eyebrow">写真からの復元 ／ Photo to plan</p>
+    <h1>インダストリアルな1LDK</h1>
+    <p class="lede">
+      5枚の写真に写っている床仕上げの切り替わり、建具のかたち、天井を走るダクトの向き、
+      そして光の入り方から各室のつながりを読み取り、平面に起こした推定間取り図です。
+    </p>
+    <dl class="facts">
+      <div class="fact"><dt>間取り</dt><dd>1LDK</dd></div>
+      <div class="fact"><dt>専有面積</dt><dd>約56.0<small>㎡</small></dd></div>
+      <div class="fact"><dt>間口 × 奥行</dt><dd>6,200 × 8,600<small>mm</small></dd></div>
+      <div class="fact"><dt>主な仕上げ</dt><dd style="font-size:.92rem">躯体現し天井／モルタル床／無垢フローリング</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="shell">
+  <figure class="planwrap">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1250 -1750 8700 13100" role="img" aria-labelledby="planTitle planDesc">
+  <title id="planTitle">インダストリアルな1LDK 復元間取り図</title>
+  <desc id="planDesc">写真5枚から推定した専有面積約56平方メートルの1LDK平面図。玄関土間、ウォークインクローゼット、モルタル床の寝室兼ワークスペース、洗面脱衣室、浴室、トイレ、Ⅱ型キッチンを含むLDK、バルコニーで構成される。</desc>
+
+  <style>
+    .wall{ fill:var(--w-wall,#2A2823); }
+    .fx{ fill:none; stroke:var(--w-line,#55524A); stroke-width:16; stroke-linejoin:round; }
+    .fx-f{ fill:var(--w-board,#EDEBE4); stroke:var(--w-line,#55524A); stroke-width:16; stroke-linejoin:round; }
+    .fx-d{ fill:none; stroke:var(--w-line-soft,#8C8880); stroke-width:14; stroke-dasharray:70 50; }
+    .leaf{ fill:none; stroke:var(--w-line,#55524A); stroke-width:34; stroke-linecap:square; }
+    .swing{ fill:none; stroke:var(--w-line-soft,#8C8880); stroke-width:12; }
+    .glass{ fill:none; stroke:var(--w-line,#55524A); stroke-width:14; }
+    .dimline{ fill:none; stroke:var(--w-dim,#7A776D); stroke-width:9; }
+    .tick{ stroke:var(--w-dim,#7A776D); stroke-width:9; }
+
+    .t{ font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Arial,sans-serif; }
+    .rname{ font-size:175px; font-weight:600; fill:var(--w-label,#23211C); letter-spacing:4px; }
+    .rname-s{ font-size:140px; font-weight:600; fill:var(--w-label,#23211C); letter-spacing:3px; }
+    .rsub{ font-size:120px; font-weight:400; fill:var(--w-sub,#6E6B62); letter-spacing:2px; }
+    .note{ font-size:108px; font-weight:400; fill:var(--w-sub,#6E6B62); letter-spacing:1px; }
+    .dimt{ font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+           font-size:124px; fill:var(--w-dim,#7A776D); letter-spacing:1px; }
+    .dimt-b{ font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+             font-size:138px; font-weight:600; fill:var(--w-dim,#7A776D); letter-spacing:1px; }
+
+    .cone{ fill:var(--w-accent,#3F6670); opacity:.15; }
+    .camdot{ fill:var(--w-accent,#3F6670); }
+    .camnum{ font-family:"Hiragino Sans","Yu Gothic",Arial,sans-serif; font-size:150px;
+             font-weight:700; fill:var(--w-board,#EDEBE4); }
+    .cam{ transition:opacity .25s ease; }
+    .cam.dim{ opacity:.22; }
+    @media (prefers-reduced-motion: reduce){ .cam{ transition:none; } }
+  </style>
+
+  <defs>
+    <pattern id="plank" width="220" height="220" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="220" stroke="var(--w-plank,#C9AF8E)" stroke-width="9"/>
+    </pattern>
+    <pattern id="balhatch" width="150" height="150" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="150" stroke="var(--w-line-soft,#8C8880)" stroke-width="7" opacity=".45"/>
+    </pattern>
+    <path id="viewcone" d="M0 0 L-500 -866 A1000 1000 0 0 1 500 -866 Z"/>
+  </defs>
+
+  <rect x="-1250" y="-1750" width="8700" height="13100" fill="var(--w-board,#EDEBE4)"/>
+
+  <!-- ============ バルコニー ============ -->
+  <g>
+    <rect x="-150" y="8750" width="6500" height="1350" fill="var(--w-balcony,#DAD8CF)"/>
+    <rect x="-150" y="8750" width="6500" height="1350" fill="url(#balhatch)"/>
+    <rect x="-150" y="10100" width="6500" height="120" class="wall"/>
+    <rect x="-150" y="8750" width="120" height="1350" class="wall"/>
+    <rect x="6230" y="8750" width="120" height="1350" class="wall"/>
+    <!-- エアコン室外機 -->
+    <rect x="4820" y="9200" width="820" height="380" class="fx-f"/>
+    <circle cx="5230" cy="9390" r="120" class="fx"/>
+  </g>
+
+  <!-- ============ 床仕上げ ============ -->
+  <g>
+    <!-- ウォルナット無垢フローリング：ホール＋LDK＋WIC -->
+    <g fill="var(--w-floor-wood,#DFCDB4)">
+      <rect x="0" y="0" width="2000" height="1850"/>
+      <rect x="2100" y="1650" width="2500" height="3900"/>
+      <rect x="4600" y="3300" width="1600" height="2250"/>
+      <rect x="0" y="5550" width="6200" height="3050"/>
+    </g>
+    <g fill="url(#plank)">
+      <rect x="0" y="0" width="2000" height="1850"/>
+      <rect x="2100" y="1650" width="2500" height="3900"/>
+      <rect x="4600" y="3300" width="1600" height="2250"/>
+      <rect x="0" y="5550" width="6200" height="3050"/>
+    </g>
+    <!-- モルタル：玄関土間・寝室 -->
+    <rect x="2100" y="0" width="1500" height="1650" fill="var(--w-floor-mortar,#CFCCC2)"/>
+    <rect x="0" y="1950" width="2700" height="3500" fill="var(--w-floor-mortar,#CFCCC2)"/>
+    <!-- 水まわり -->
+    <rect x="3700" y="0" width="800" height="1650" fill="var(--w-floor-tile,#E2E1DA)"/>
+    <rect x="4600" y="1700" width="1600" height="1500" fill="var(--w-floor-tile,#E2E1DA)"/>
+    <rect x="4600" y="0" width="1600" height="1600" fill="var(--w-floor-bath,#DCE3E1)"/>
+  </g>
+
+  <!-- ============ 造作・設備 ============ -->
+  <g>
+    <!-- 浴室 1616ユニットバス -->
+    <rect x="4700" y="100" width="1400" height="700" rx="70" class="fx-f"/>
+    <circle cx="4880" cy="1330" r="70" class="fx"/>
+
+    <!-- 洗面脱衣室 -->
+    <rect x="5420" y="1780" width="720" height="500" class="fx-f"/>
+    <ellipse cx="5780" cy="2030" rx="200" ry="140" class="fx"/>
+    <rect x="4680" y="1790" width="640" height="640" class="fx-f"/>
+    <circle cx="5000" cy="2110" r="200" class="fx"/>
+    <text class="t note" x="5000" y="2610" text-anchor="middle">洗濯機</text>
+
+    <!-- トイレ -->
+    <rect x="3930" y="120" width="340" height="190" class="fx-f"/>
+    <ellipse cx="4100" cy="560" rx="180" ry="270" class="fx-f"/>
+
+    <!-- 玄関：シューズラック（オープン棚）＋上がり框 -->
+    <rect x="3250" y="150" width="350" height="1350" class="fx-d"/>
+    <g class="fx-d">
+      <line x1="3250" y1="487" x2="3600" y2="487"/>
+      <line x1="3250" y1="825" x2="3600" y2="825"/>
+      <line x1="3250" y1="1162" x2="3600" y2="1162"/>
+    </g>
+    <rect x="2100" y="1590" width="1500" height="60" class="wall"/>
+
+    <!-- WIC：枕棚＋ハンガーパイプ＋可動棚 -->
+    <line x1="110" y1="430" x2="1890" y2="430" class="fx-d"/>
+    <line x1="110" y1="560" x2="1890" y2="560" class="fx"/>
+    <rect x="1560" y="720" width="380" height="1030" class="fx-d"/>
+    <line x1="1560" y1="1063" x2="1940" y2="1063" class="fx-d"/>
+    <line x1="1560" y1="1406" x2="1940" y2="1406" class="fx-d"/>
+
+    <!-- 寝室：ベッド／デスク／チェア／本棚／フック -->
+    <rect x="120" y="3300" width="1200" height="1980" rx="45" class="fx-f"/>
+    <rect x="160" y="3345" width="1120" height="400" rx="40" class="fx"/>
+    <line x1="120" y1="4050" x2="1320" y2="4050" class="fx"/>
+    <rect x="1950" y="2500" width="750" height="1500" class="fx-f"/>
+    <rect x="2180" y="2760" width="520" height="120" class="fx"/>
+    <circle cx="1680" cy="3090" r="270" class="fx-f"/>
+    <rect x="2300" y="4400" width="400" height="900" class="fx-f"/>
+    <line x1="2300" y1="4700" x2="2700" y2="4700" class="fx"/>
+    <line x1="2300" y1="5000" x2="2700" y2="5000" class="fx"/>
+    <g class="camdot">
+      <circle cx="95" cy="2180" r="55"/><circle cx="95" cy="2420" r="55"/><circle cx="95" cy="2660" r="55"/>
+    </g>
+
+    <!-- キッチン Ⅱ型 -->
+    <rect x="4300" y="3450" width="650" height="2550" class="fx-f"/>
+    <rect x="4380" y="3700" width="490" height="620" rx="45" class="fx"/>
+    <rect x="4320" y="4450" width="610" height="600" class="fx-d"/>
+    <rect x="4380" y="5180" width="490" height="640" class="fx"/>
+    <g class="fx">
+      <circle cx="4500" cy="5340" r="90"/><circle cx="4750" cy="5340" r="90"/>
+      <circle cx="4500" cy="5650" r="90"/><circle cx="4750" cy="5650" r="90"/>
+    </g>
+    <rect x="5800" y="3450" width="400" height="2400" class="fx-f"/>
+    <line x1="5800" y1="4650" x2="6200" y2="4650" class="fx"/>
+
+    <!-- リビング：TVボード／チェア／オットマン／ローテーブル／グリーン -->
+    <rect x="0" y="6500" width="400" height="1400" class="fx-f"/>
+    <rect x="400" y="6850" width="70" height="700" class="fx-f"/>
+    <rect x="2500" y="6680" width="720" height="780" rx="70" class="fx-f"/>
+    <line x1="3150" y1="6680" x2="3150" y2="7460" class="fx"/>
+    <rect x="2560" y="7540" width="600" height="380" rx="60" class="fx-f"/>
+    <ellipse cx="1720" cy="7120" rx="520" ry="330" class="fx"/>
+    <circle cx="4560" cy="8220" r="270" class="fx"/>
+    <circle cx="5180" cy="8300" r="190" class="fx"/>
+    <rect x="0" y="7960" width="130" height="820" class="fx-d"/>
+    <text class="t note" x="330" y="8460" >エアコン</text>
+  </g>
+
+  <!-- ============ 壁 ============ -->
+  <g class="wall">
+    <!-- 外壁（開口部で分割） -->
+    <rect x="-150" y="-150" width="2650" height="150"/>
+    <rect x="3400" y="-150" width="2950" height="150"/>
+    <rect x="-150" y="8600" width="1550" height="150"/>
+    <rect x="4200" y="8600" width="2150" height="150"/>
+    <rect x="-150" y="0" width="150" height="2400"/>
+    <rect x="-150" y="3400" width="150" height="5200"/>
+    <rect x="6200" y="0" width="150" height="8600"/>
+
+    <!-- 間仕切り壁 t=100 -->
+    <rect x="2000" y="-150" width="100" height="550"/>
+    <rect x="2000" y="1500" width="100" height="450"/>
+    <rect x="3600" y="-150" width="100" height="1800"/>
+    <rect x="4500" y="-150" width="100" height="2600"/>
+    <rect x="4500" y="3150" width="100" height="150"/>
+    <rect x="4600" y="1600" width="550" height="100"/>
+    <rect x="5850" y="1600" width="350" height="100"/>
+    <rect x="3600" y="1650" width="150" height="100"/>
+    <rect x="4400" y="1650" width="200" height="100"/>
+    <rect x="0" y="1850" width="900" height="100"/>
+    <rect x="1900" y="1850" width="200" height="100"/>
+    <rect x="4600" y="3200" width="1600" height="100"/>
+    <rect x="2700" y="1950" width="100" height="3500"/>
+    <rect x="0" y="5450" width="900" height="100"/>
+  </g>
+
+  <!-- ============ 建具・開口 ============ -->
+  <g>
+    <!-- 玄関ドア（外開き） -->
+    <path class="swing" d="M3400 -900 A900 900 0 0 0 2500 0"/>
+    <line class="leaf" x1="3400" y1="0" x2="3400" y2="-900"/>
+
+    <!-- 洗面脱衣室ドア（内開き） -->
+    <path class="swing" d="M5300 2450 A700 700 0 0 1 4600 3150"/>
+    <line class="leaf" x1="4600" y1="2450" x2="5300" y2="2450"/>
+
+    <!-- トイレドア（内開き） -->
+    <path class="swing" d="M3750 1000 A650 650 0 0 1 4400 1650"/>
+    <line class="leaf" x1="3750" y1="1650" x2="3750" y2="1000"/>
+
+    <!-- 浴室 折戸 -->
+    <polyline class="leaf" points="5150,1650 5500,1900 5850,1650"/>
+
+    <!-- WIC 引戸（玄関土間側） -->
+    <g class="leaf"><line x1="2160" y1="400" x2="2160" y2="1500"/></g>
+    <line class="fx" x1="2060" y1="400" x2="2060" y2="1500"/>
+    <path class="swing" d="M2280 700 L2280 1200 M2280 700 L2210 790 M2280 700 L2350 790"/>
+
+    <!-- WIC 引戸（寝室側） -->
+    <g class="leaf"><line x1="900" y1="2010" x2="1900" y2="2010"/></g>
+    <line class="fx" x1="900" y1="1910" x2="1900" y2="1910"/>
+    <path class="swing" d="M1150 2140 L1650 2140 M1150 2140 L1240 2070 M1150 2140 L1240 2210"/>
+
+    <!-- 寝室 ⇄ LDK 大開口引戸（2枚引違い） -->
+    <g class="leaf">
+      <line x1="900" y1="5610" x2="1800" y2="5610"/>
+      <line x1="1800" y1="5390" x2="2700" y2="5390"/>
+    </g>
+    <path class="swing" d="M1250 5760 L2350 5760 M1250 5760 L1340 5690 M1250 5760 L1340 5830
+                           M2350 5760 L2260 5690 M2350 5760 L2260 5830"/>
+
+    <!-- 掃き出し窓 -->
+    <g class="glass">
+      <line x1="1400" y1="8620" x2="4200" y2="8620"/>
+      <line x1="1400" y1="8675" x2="4200" y2="8675"/>
+      <line x1="1400" y1="8730" x2="4200" y2="8730"/>
+    </g>
+    <g class="wall">
+      <rect x="1400" y="8600" width="60" height="150"/>
+      <rect x="4140" y="8600" width="60" height="150"/>
+      <rect x="2770" y="8600" width="60" height="150"/>
+    </g>
+
+    <!-- 寝室 腰窓 -->
+    <g class="glass">
+      <line x1="-130" y1="2400" x2="-130" y2="3400"/>
+      <line x1="-75" y1="2400" x2="-75" y2="3400"/>
+      <line x1="-20" y1="2400" x2="-20" y2="3400"/>
+    </g>
+    <g class="wall">
+      <rect x="-150" y="2400" width="150" height="60"/>
+      <rect x="-150" y="3340" width="150" height="60"/>
+    </g>
+  </g>
+
+  <!-- ============ 撮影位置 ============ -->
+  <g id="cams">
+    <g class="cam" id="cam1">
+      <use href="#viewcone" class="cone" transform="translate(2950,320) rotate(180) scale(1.5)"/>
+      <circle cx="2950" cy="320" r="175" class="camdot"/>
+      <text class="camnum" x="2950" y="373" text-anchor="middle">1</text>
+    </g>
+    <g class="cam" id="cam2">
+      <use href="#viewcone" class="cone" transform="translate(3300,3520) rotate(178) scale(1.6)"/>
+      <circle cx="3300" cy="3520" r="175" class="camdot"/>
+      <text class="camnum" x="3300" y="3573" text-anchor="middle">2</text>
+    </g>
+    <g class="cam" id="cam3">
+      <use href="#viewcone" class="cone" transform="translate(1450,5150) rotate(356) scale(1)"/>
+      <circle cx="1450" cy="5150" r="175" class="camdot"/>
+      <text class="camnum" x="1450" y="5203" text-anchor="middle">3</text>
+    </g>
+    <g class="cam" id="cam4">
+      <use href="#viewcone" class="cone" transform="translate(1800,6200) rotate(0) scale(.95)"/>
+      <circle cx="1800" cy="6200" r="175" class="camdot"/>
+      <text class="camnum" x="1800" y="6253" text-anchor="middle">4</text>
+    </g>
+    <g class="cam" id="cam5">
+      <use href="#viewcone" class="cone" transform="translate(1830,3620) rotate(333) scale(1.15)"/>
+      <circle cx="1830" cy="3620" r="175" class="camdot"/>
+      <text class="camnum" x="1830" y="3673" text-anchor="middle">5</text>
+    </g>
+  </g>
+
+  <!-- ============ 室名 ============ -->
+  <g class="t" text-anchor="middle">
+    <text class="rname-s" x="1000" y="1180">WIC</text>
+    <text class="rsub" x="1000" y="1370">2.3帖</text>
+
+    <text class="rname" x="2850" y="1000">玄関</text>
+    <text class="rsub" x="2850" y="1190">土間モルタル</text>
+
+    <text class="rname-s" x="4100" y="1180">トイレ</text>
+
+    <text class="rname-s" x="5400" y="1000">浴室</text>
+    <text class="rsub" x="5400" y="1190">1616</text>
+
+    <text class="rname-s" x="5400" y="3050">洗面脱衣</text>
+
+    <text class="rsub" x="3400" y="2980">ホール</text>
+
+    <text class="rname" x="1150" y="2360">寝室 兼</text>
+    <text class="rname" x="1150" y="2570">ワークスペース</text>
+    <text class="rsub" x="1150" y="2770">5.8帖 ／ モルタル床</text>
+
+    <text class="rname" x="3450" y="6220">LDK</text>
+    <text class="rsub" x="3450" y="6420">16.4帖</text>
+
+    <text class="rname-s" x="5470" y="4560">キッチン</text>
+    <text class="rsub" x="5470" y="4740">Ⅱ型</text>
+
+    <text class="rname-s" x="3100" y="9450">バルコニー</text>
+    <text class="rsub" x="3100" y="9640">奥行 1,350</text>
+  </g>
+
+  <!-- 現し・素材の注記 -->
+  <g class="t note">
+    <text x="170" y="3090">躯体現し壁＋フック</text>
+    <text x="1250" y="8200">天井：コンクリート現し／スパイラルダクト</text>
+    <text x="1250" y="8360">＋ライティングレール</text>
+  </g>
+
+  <!-- ============ 寸法 ============ -->
+  <g>
+    <!-- 上：間口 -->
+    <g class="tick">
+      <line x1="0" y1="-1080" x2="0" y2="-1520"/>
+      <line x1="2000" y1="-1080" x2="2000" y2="-1220"/>
+      <line x1="2100" y1="-1080" x2="2100" y2="-1220"/>
+      <line x1="3600" y1="-1080" x2="3600" y2="-1220"/>
+      <line x1="3700" y1="-1080" x2="3700" y2="-1220"/>
+      <line x1="4500" y1="-1080" x2="4500" y2="-1220"/>
+      <line x1="4600" y1="-1080" x2="4600" y2="-1220"/>
+      <line x1="6200" y1="-1080" x2="6200" y2="-1520"/>
+    </g>
+    <line class="dimline" x1="0" y1="-1150" x2="6200" y2="-1150"/>
+    <line class="dimline" x1="0" y1="-1450" x2="6200" y2="-1450"/>
+    <g class="dimt" text-anchor="middle">
+      <text x="1000" y="-1230">2,000</text>
+      <text x="2850" y="-1230">1,500</text>
+      <text x="4100" y="-1230">800</text>
+      <text x="5400" y="-1230">1,600</text>
+    </g>
+    <text class="dimt-b" x="3100" y="-1530" text-anchor="middle">6,200</text>
+
+    <!-- 左：奥行 -->
+    <g class="tick">
+      <line x1="-450" y1="0" x2="-950" y2="0"/>
+      <line x1="-450" y1="1850" x2="-750" y2="1850"/>
+      <line x1="-450" y1="1950" x2="-750" y2="1950"/>
+      <line x1="-450" y1="5450" x2="-750" y2="5450"/>
+      <line x1="-450" y1="5550" x2="-750" y2="5550"/>
+      <line x1="-450" y1="8600" x2="-950" y2="8600"/>
+    </g>
+    <line class="dimline" x1="-700" y1="0" x2="-700" y2="8600"/>
+    <line class="dimline" x1="-950" y1="0" x2="-950" y2="8600"/>
+    <g class="dimt" text-anchor="middle">
+      <text x="-780" y="925" transform="rotate(-90 -780 925)">1,850</text>
+      <text x="-780" y="3700" transform="rotate(-90 -780 3700)">3,500</text>
+      <text x="-780" y="7075" transform="rotate(-90 -780 7075)">3,050</text>
+    </g>
+    <text class="dimt-b" x="-1030" y="4300" text-anchor="middle" transform="rotate(-90 -1030 4300)">8,600</text>
+
+    <!-- 右：水まわり -->
+    <g class="tick">
+      <line x1="6650" y1="0" x2="6950" y2="0"/>
+      <line x1="6650" y1="1600" x2="6950" y2="1600"/>
+      <line x1="6650" y1="1700" x2="6950" y2="1700"/>
+      <line x1="6650" y1="3200" x2="6950" y2="3200"/>
+      <line x1="6650" y1="3300" x2="6950" y2="3300"/>
+      <line x1="6650" y1="8600" x2="6950" y2="8600"/>
+      <line x1="6650" y1="10100" x2="6950" y2="10100"/>
+    </g>
+    <line class="dimline" x1="6900" y1="0" x2="6900" y2="10100"/>
+    <g class="dimt" text-anchor="middle">
+      <text x="6820" y="800" transform="rotate(-90 6820 800)">1,600</text>
+      <text x="6820" y="2450" transform="rotate(-90 6820 2450)">1,500</text>
+      <text x="6820" y="5950" transform="rotate(-90 6820 5950)">5,300</text>
+      <text x="6820" y="9350" transform="rotate(-90 6820 9350)">1,350</text>
+    </g>
+  </g>
+
+  <!-- ============ スケール・注記 ============ -->
+  <g>
+    <g class="dimline">
+      <line x1="0" y1="10720" x2="3000" y2="10720"/>
+      <line x1="0" y1="10650" x2="0" y2="10790"/>
+      <line x1="1000" y1="10660" x2="1000" y2="10780"/>
+      <line x1="2000" y1="10660" x2="2000" y2="10780"/>
+      <line x1="3000" y1="10650" x2="3000" y2="10790"/>
+    </g>
+    <rect x="0" y="10695" width="1000" height="50" fill="var(--w-dim,#7A776D)"/>
+    <rect x="2000" y="10695" width="1000" height="50" fill="var(--w-dim,#7A776D)"/>
+    <g class="dimt">
+      <text x="0" y="10600">0</text>
+      <text x="960" y="10600">1</text>
+      <text x="1960" y="10600">2</text>
+      <text x="2900" y="10600">3 m</text>
+    </g>
+    <g class="t note">
+      <text x="0" y="11090">単位 mm ／ 内法寸法。写真からの推定復元図であり、実測図ではありません。</text>
+      <text x="0" y="11250">方位は不明のため、バルコニー側を下として作図しています。</text>
+    </g>
+  </g>
+</svg>
+    <figcaption>
+      丸数字は各写真の撮影位置と、そこから見ている方向を示します。<br>
+      下の一覧をクリックすると、対応する位置が図面上で強調されます。
+    </figcaption>
+    <div class="legend">
+      <div><span class="sw" style="background:var(--w-floor-wood)"></span>無垢フローリング</div>
+      <div><span class="sw" style="background:var(--w-floor-mortar)"></span>モルタル（土間・寝室）</div>
+      <div><span class="sw" style="background:var(--w-floor-tile)"></span>フロアタイル（水まわり）</div>
+      <div><span class="sw" style="background:var(--w-floor-bath)"></span>ユニットバス</div>
+      <div><span class="sw" style="background:var(--w-balcony)"></span>バルコニー</div>
+      <div><span class="sw" style="background:var(--w-accent);border-color:var(--w-accent)"></span>撮影位置と視野</div>
+    </div>
+  </figure>
+</div>
+
+<main class="shell">
+
+  <section>
+    <div class="sechead">
+      <p class="eyebrow">写真 ①–⑤</p>
+      <h2>それぞれの写真から、何を読み取ったか</h2>
+      <p>番号は図面上のマーカーと対応しています。各項目の下段は、その写真が平面のどこを確定させたかです。</p>
+    </div>
+
+    <ul class="keys">
+      <li>
+        <button class="key" type="button" data-cam="1">
+          <span class="keynum">1</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">玄関</span><span class="keyfile">IMG_0182</span></span>
+            <p>入ってすぐの土間はモルタル。左手の壁一面に可動レールのオープンシューズラック、右手には
+              バッグを掛けたハンガー掛けがあり、正面の廊下から先はフローリングに変わります。
+              廊下の左奥に白い開き戸が1枚。天井は躯体現しで、スパイラルダクトが奥へ抜けています。</p>
+            <ul class="reads">
+              <li>土間と居室の床の切り替わり位置</li>
+              <li>玄関を挟んで収納が両側にある</li>
+              <li>水まわりへの扉は廊下側</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="2">
+          <span class="keynum">2</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">LDK</span><span class="keyfile">IMG_0183</span></span>
+            <p>手前左からキッチンが奥へ伸びます。食洗機を組み込んだ対面カウンターと、その背後にもう一列の
+              バックカウンターがあるⅡ型。正面奥が掃き出し窓、右手にテレビと壁掛けエアコン。
+              天井はコンクリートの大梁が現しで、ライティングレールが渡してあります。</p>
+            <ul class="reads">
+              <li>キッチンはⅡ型で、窓と直交する向き</li>
+              <li>LDKの奥行が最も長い方向＝バルコニー側</li>
+              <li>キッチンとテレビが左右に振り分けられている</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="3">
+          <span class="keynum">3</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">寝室 兼 ワークスペース</span><span class="keyfile">IMG_0185</span></span>
+            <p>左にベッド、右にデスクとモニター。天井をスパイラルダクトが横切り、
+              壁は塗り仕上げの無地。ベッドとデスクが1つの短辺に収まる、小さな部屋です。</p>
+            <ul class="reads">
+              <li>寝室の幅は、ベッド＋通路＋デスクで約2.7m</li>
+              <li>ベッドとデスクは向かい合う壁付け</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="4">
+          <span class="keynum">4</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">LDK から寝室を見る</span><span class="keyfile">IMG_0186</span></span>
+            <p>手前は濃色のフローリング、そこから段差を介して寝室のモルタル床へ。
+              左手は躯体現しのコンクリート壁で、フックにバッグとコートが掛かっています。
+              奥左にクローゼット、その先にベッド。右手には本棚と、開口の袖壁。</p>
+            <ul class="reads">
+              <li>LDKと寝室が直接つながる（大開口の引戸）</li>
+              <li>寝室の床はモルタルで、LDKより一段低い</li>
+              <li>クローゼットは寝室の奥＝玄関側にある</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="5">
+          <span class="keynum">5</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">クローゼット</span><span class="keyfile">IMG_0187</span></span>
+            <p>手前に大判の引戸が1枚。奥行の浅いニッチに可動棚とハンガーパイプが納まり、衣類が掛かっています。
+              背後にはライティングレールの付いた躯体現し天井と、明るい窓。
+              ④で見えたクローゼットを、寝室側から見た位置関係と読めます。</p>
+            <ul class="reads">
+              <li>クローゼットは引戸で仕切られる</li>
+              <li>玄関側と寝室側の両方から出入りできる配置</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <p class="eyebrow">面積表</p>
+      <h2>各室の想定寸法</h2>
+      <p>寸法はすべて内法。帖数は1帖＝1.62㎡で換算しています。</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <caption>数値は写真から起こした推定値であり、実測に基づくものではありません。</caption>
+        <thead>
+          <tr>
+            <th scope="col">室名</th>
+            <th scope="col" class="num">内法寸法 mm</th>
+            <th scope="col" class="num">面積 ㎡</th>
+            <th scope="col" class="num">帖</th>
+            <th scope="col">床仕上げ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">LDK</th><td class="num">－</td><td class="num">26.56</td><td class="num">16.4</td><td>無垢フローリング</td></tr>
+          <tr><th scope="row">寝室 兼 ワークスペース</th><td class="num">2,700 × 3,500</td><td class="num">9.45</td><td class="num">5.8</td><td>モルタル</td></tr>
+          <tr><th scope="row">ホール</th><td class="num">2,500 × 1,550</td><td class="num">3.88</td><td class="num">2.4</td><td>無垢フローリング</td></tr>
+          <tr><th scope="row">WIC</th><td class="num">2,000 × 1,850</td><td class="num">3.70</td><td class="num">2.3</td><td>無垢フローリング</td></tr>
+          <tr><th scope="row">浴室<span class="sub">（1616）</span></th><td class="num">1,600 × 1,600</td><td class="num">2.56</td><td class="num">1.6</td><td>ユニットバス</td></tr>
+          <tr><th scope="row">玄関<span class="sub">（土間）</span></th><td class="num">1,500 × 1,650</td><td class="num">2.48</td><td class="num">1.5</td><td>モルタル</td></tr>
+          <tr><th scope="row">洗面脱衣室</th><td class="num">1,600 × 1,500</td><td class="num">2.40</td><td class="num">1.5</td><td>フロアタイル</td></tr>
+          <tr><th scope="row">トイレ</th><td class="num">800 × 1,650</td><td class="num">1.32</td><td class="num">0.8</td><td>フロアタイル</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>室面積 計</td><td class="num">－</td><td class="num">52.35</td><td class="num">32.3</td>
+            <td class="sub">壁厚を含む専有面積 約56.0㎡</td>
+          </tr>
+          <tr>
+            <td>バルコニー</td><td class="num">6,200 × 1,350</td><td class="num">8.37</td><td class="num">－</td><td class="sub">面積に含まず</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <p class="eyebrow">確度</p>
+      <h2>どこまでが写真で、どこからが推定か</h2>
+      <p>この図は写真を根拠にした復元であって、実測図ではありません。判断の確からしさは3段階に分かれます。</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tierhead">
+          <span class="bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span></span>
+          <h3>写真に直接写っている</h3>
+        </div>
+        <ul>
+          <li>玄関土間と寝室がモルタル、その他がフローリングという床の使い分け</li>
+          <li>LDKと寝室が大開口の引戸で直接つながり、床に段差があること</li>
+          <li>キッチンがⅡ型で、食洗機とレンジフードを備えること</li>
+          <li>天井が躯体現しで、スパイラルダクトとライティングレールが露出していること</li>
+          <li>玄関の片側がオープンのシューズラック、反対側がハンガー掛けであること</li>
+          <li>寝室にベッドとデスクが向かい合わせに納まること</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tierhead">
+          <span class="bars"><span class="bar on"></span><span class="bar on"></span><span class="bar"></span></span>
+          <h3>位置関係から妥当に推定</h3>
+        </div>
+        <ul>
+          <li>玄関 → ホール → LDK と抜け、寝室がLDKに隣接する並び順</li>
+          <li>クローゼットが玄関と寝室の間にあり、両側から使えること</li>
+          <li>掃き出し窓の先がバルコニーで、そこがLDKの最奥であること</li>
+          <li>水まわりを玄関の片側にまとめた配置</li>
+          <li>寝室の幅が2.7m前後、LDKが16帖前後という規模感</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tierhead">
+          <span class="bars"><span class="bar on"></span><span class="bar"></span><span class="bar"></span></span>
+          <h3>写真からは決められず、仮に置いた</h3>
+        </div>
+        <ul>
+          <li><strong>すべての寸法と面積。</strong>一般的なマンションの寸法から矛盾なく置いた値です</li>
+          <li><strong>浴室・洗面脱衣室・トイレ。</strong>5枚のいずれにも写っておらず、位置も大きさも仮定です</li>
+          <li>寝室の窓の有無と位置。⑤の明るさから外部開口を想定しました</li>
+          <li>方位。判断材料がないため、バルコニー側を下として作図しています</li>
+          <li>玄関ドアの吊元と開き勝手</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="shell">
+  <p>
+    出典：Instagram <span style="font-family:var(--f-mono)">@renoveru</span> のストーリーズ投稿のスクリーンショット5枚（IMG_0182 / 0183 / 0185 / 0186 / 0187）より作図。
+    本図は写真をもとに第三者が起こした非公式の推定復元図であり、実際の物件図面ではありません。
+    なお①の梁には「3,900」の墨書きが見えますが、記入の意図が特定できないため本図の寸法には反映していません。
+  </p>
+</footer>
+
+<script>
+  (function () {
+    var keys = document.querySelectorAll('.key');
+    var cams = document.querySelectorAll('#cams .cam');
+    var active = null;
+
+    function highlight(n) {
+      active = n;
+      cams.forEach(function (c) {
+        c.classList.toggle('dim', n !== null && c.id !== 'cam' + n);
+      });
+    }
+
+    keys.forEach(function (k) {
+      var n = k.getAttribute('data-cam');
+      k.addEventListener('mouseenter', function () { highlight(n); });
+      k.addEventListener('focus', function () { highlight(n); });
+      k.addEventListener('mouseleave', function () { if (active === n) highlight(null); });
+      k.addEventListener('blur', function () { if (active === n) highlight(null); });
+      k.addEventListener('click', function () {
+        highlight(n);
+        var svg = document.querySelector('.planwrap svg');
+        if (svg) svg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  })();
+</script>

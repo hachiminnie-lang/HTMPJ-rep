@@ -1,0 +1,453 @@
+<title>インダストリアルな1LDK ｜ 写真からの推定間取り図</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  :root{
+    --ground:#EFEEE8; --surface:#F7F6F1; --board:#EDEBE4;
+    --ink:#22201B; --ink-2:#56534B; --ink-3:#857F73;
+    --rule:#D6D2C7; --rule-soft:#E4E1D8;
+    --accent:#3F6670; --accent-ink:#2E4C55; --accent-soft:rgba(63,102,112,.10);
+
+    --w-board:#EDEBE4; --w-wall:#2A2823; --w-line:#55524A; --w-line-soft:#8C8880;
+    --w-floor-wood:#DFCDB4; --w-floor-mortar:#CFCCC2; --w-floor-tile:#E2E1DA;
+    --w-floor-bath:#DCE3E1; --w-balcony:#DAD8CF; --w-plank:#C9AF8E;
+    --w-dim:#7A776D; --w-label:#23211C; --w-sub:#6E6B62; --w-accent:#3F6670;
+
+    --f-display:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP","Songti SC","Iowan Old Style",Georgia,serif;
+    --f-body:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP","Helvetica Neue",Arial,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+
+    --shell:min(1120px, 92vw);
+    --read:38rem;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#171714; --surface:#1F1F1B; --board:#1F1F1C;
+      --ink:#EDEBE2; --ink-2:#A8A499; --ink-3:#7C766B;
+      --rule:#33332C; --rule-soft:#282821;
+      --accent:#86B7C2; --accent-ink:#A9CDD5; --accent-soft:rgba(134,183,194,.13);
+
+      --w-board:#1F1F1C; --w-wall:#E8E5DB; --w-line:#A5A196; --w-line-soft:#6E6B62;
+      --w-floor-wood:#3B342B; --w-floor-mortar:#35342F; --w-floor-tile:#2C2C28;
+      --w-floor-bath:#26302F; --w-balcony:#292824; --w-plank:#4A4034;
+      --w-dim:#8A867B; --w-label:#EFEDE4; --w-sub:#A5A196; --w-accent:#86B7C2;
+    }
+  }
+  :root[data-theme="light"]{
+    --ground:#EFEEE8; --surface:#F7F6F1; --board:#EDEBE4;
+    --ink:#22201B; --ink-2:#56534B; --ink-3:#857F73;
+    --rule:#D6D2C7; --rule-soft:#E4E1D8;
+    --accent:#3F6670; --accent-ink:#2E4C55; --accent-soft:rgba(63,102,112,.10);
+    --w-board:#EDEBE4; --w-wall:#2A2823; --w-line:#55524A; --w-line-soft:#8C8880;
+    --w-floor-wood:#DFCDB4; --w-floor-mortar:#CFCCC2; --w-floor-tile:#E2E1DA;
+    --w-floor-bath:#DCE3E1; --w-balcony:#DAD8CF; --w-plank:#C9AF8E;
+    --w-dim:#7A776D; --w-label:#23211C; --w-sub:#6E6B62; --w-accent:#3F6670;
+  }
+  :root[data-theme="dark"]{
+    --ground:#171714; --surface:#1F1F1B; --board:#1F1F1C;
+    --ink:#EDEBE2; --ink-2:#A8A499; --ink-3:#7C766B;
+    --rule:#33332C; --rule-soft:#282821;
+    --accent:#86B7C2; --accent-ink:#A9CDD5; --accent-soft:rgba(134,183,194,.13);
+    --w-board:#1F1F1C; --w-wall:#E8E5DB; --w-line:#A5A196; --w-line-soft:#6E6B62;
+    --w-floor-wood:#3B342B; --w-floor-mortar:#35342F; --w-floor-tile:#2C2C28;
+    --w-floor-bath:#26302F; --w-balcony:#292824; --w-plank:#4A4034;
+    --w-dim:#8A867B; --w-label:#EFEDE4; --w-sub:#A5A196; --w-accent:#86B7C2;
+  }
+
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:16px; line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  .shell{ width:var(--shell); margin-inline:auto; }
+  .stack{ display:flex; flex-direction:column; }
+
+  .eyebrow{
+    font-family:var(--f-mono); font-size:.7rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--accent-ink); margin:0;
+  }
+  h1{
+    font-family:var(--f-display); font-weight:600;
+    font-size:clamp(1.9rem, 5.2vw, 3rem); line-height:1.28;
+    letter-spacing:.02em; text-wrap:balance; margin:0;
+  }
+  h2{
+    font-family:var(--f-display); font-weight:600;
+    font-size:clamp(1.15rem, 2.4vw, 1.4rem); line-height:1.5;
+    letter-spacing:.04em; text-wrap:balance; margin:0;
+  }
+  h3{ font-size:.95rem; font-weight:600; letter-spacing:.04em; margin:0; }
+  p{ margin:0; max-width:var(--read); color:var(--ink-2); }
+  p.lede{ color:var(--ink); font-size:1.02rem; }
+
+  /* ---------- header ---------- */
+  .masthead{ padding:clamp(3rem,8vw,5.5rem) 0 clamp(2rem,5vw,3rem); gap:1.25rem; }
+  .masthead .stack{ gap:1.1rem; }
+
+  .facts{
+    display:flex; flex-wrap:wrap; gap:0;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    margin-top:.5rem;
+  }
+  .fact{ padding:.9rem 1.5rem .9rem 0; margin-right:1.5rem; border-right:1px solid var(--rule-soft); }
+  .fact:last-child{ border-right:0; margin-right:0; }
+  .fact dt{
+    font-family:var(--f-mono); font-size:.66rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 .15rem;
+  }
+  .fact dd{ margin:0; font-size:1.02rem; font-weight:600; font-variant-numeric:tabular-nums; }
+  .fact dd small{ font-weight:400; font-size:.8rem; color:var(--ink-3); margin-left:.15rem; }
+
+  /* ---------- plan ---------- */
+  .planwrap{
+    background:var(--board); border:1px solid var(--rule);
+    padding:clamp(1rem,3vw,2.25rem); margin:0;
+    display:flex; flex-direction:column; align-items:center; gap:1.25rem;
+    overflow-x:auto;
+  }
+  .planwrap svg{ display:block; width:100%; max-width:760px; height:auto; }
+  figcaption{
+    font-size:.8rem; color:var(--ink-3); line-height:1.7;
+    max-width:var(--read); text-align:center; margin:0;
+  }
+
+  .legend{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(148px,1fr));
+    gap:.55rem 1.5rem; width:100%; max-width:760px;
+    padding-top:1.1rem; border-top:1px solid var(--rule-soft);
+  }
+  .legend div{ display:flex; align-items:center; gap:.55rem; font-size:.78rem; color:var(--ink-2); }
+  .sw{ width:1.35rem; height:.95rem; border:1px solid var(--w-line-soft); flex:none; }
+
+  /* ---------- sections ---------- */
+  section{ padding:clamp(2.75rem,7vw,4.5rem) 0; border-top:1px solid var(--rule); }
+  .sechead{ display:flex; flex-direction:column; gap:.6rem; margin-bottom:2rem; }
+
+  /* ---------- photo keys ---------- */
+  .keys{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; }
+  .keys li{ border-top:1px solid var(--rule-soft); }
+  .keys li:first-child{ border-top:0; }
+  .key{
+    display:grid; grid-template-columns:2.4rem 1fr; gap:0 1.25rem;
+    padding:1.4rem 0; width:100%; text-align:left;
+    background:none; border:0; color:inherit; font:inherit; cursor:pointer;
+    transition:background-color .2s ease;
+  }
+  .key:hover, .key:focus-visible{ background:var(--accent-soft); }
+  .key:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .keynum{
+    width:2.05rem; height:2.05rem; border-radius:50%; background:var(--accent);
+    color:var(--board); display:grid; place-items:center;
+    font-family:var(--f-mono); font-size:.92rem; font-weight:700; margin-top:.1rem;
+  }
+  .keybody{ display:flex; flex-direction:column; gap:.35rem; min-width:0; }
+  .keytitle{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.5rem .75rem; }
+  .keyroom{ font-family:var(--f-display); font-size:1.1rem; font-weight:600; letter-spacing:.03em; }
+  .keyfile{ font-family:var(--f-mono); font-size:.68rem; color:var(--ink-3); letter-spacing:.06em; }
+  .keybody p{ font-size:.92rem; max-width:44rem; }
+  .reads{ list-style:none; padding:0; margin:.15rem 0 0; display:flex; flex-wrap:wrap; gap:.35rem .45rem; }
+  .reads li{
+    border:1px solid var(--rule); border-radius:999px; padding:.12rem .6rem;
+    font-size:.74rem; color:var(--ink-2); line-height:1.6;
+  }
+
+  /* ---------- table ---------- */
+  .tablewrap{ overflow-x:auto; }
+  table{ border-collapse:collapse; width:100%; min-width:30rem; font-variant-numeric:tabular-nums; }
+  caption{ text-align:left; font-size:.8rem; color:var(--ink-3); padding-bottom:.6rem; }
+  th, td{ padding:.6rem .9rem .6rem 0; text-align:left; border-bottom:1px solid var(--rule-soft); font-size:.92rem; }
+  thead th{
+    font-family:var(--f-mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-3); font-weight:500; border-bottom:1px solid var(--rule); white-space:nowrap;
+  }
+  td.num, th.num{ text-align:right; padding-right:1.4rem; }
+  tbody tr:last-child td{ border-bottom:1px solid var(--rule); }
+  tfoot td{ font-weight:600; border-bottom:0; padding-top:.75rem; }
+  td .sub{ color:var(--ink-3); font-size:.8rem; }
+
+  /* ---------- confidence ---------- */
+  .tiers{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap:1.75rem 2.5rem; }
+  .tier{ display:flex; flex-direction:column; gap:.7rem; }
+  .tierhead{ display:flex; align-items:center; gap:.6rem; }
+  .bars{ display:flex; gap:3px; }
+  .bar{ width:1.1rem; height:.3rem; background:var(--rule); }
+  .bar.on{ background:var(--accent); }
+  .tier ul{ margin:0; padding-left:1.1rem; display:flex; flex-direction:column; gap:.4rem; }
+  .tier li{ font-size:.88rem; color:var(--ink-2); line-height:1.7; }
+
+  footer{
+    border-top:1px solid var(--rule); padding:2.25rem 0 3.5rem;
+    font-size:.78rem; color:var(--ink-3); line-height:1.8;
+  }
+  footer p{ font-size:.78rem; color:var(--ink-3); max-width:var(--read); }
+
+  /* A floor plan stops being readable below a certain size, so on narrow
+     screens it keeps a minimum width and scrolls inside its own frame. */
+  @media (max-width: 700px){
+    .planwrap svg{ min-width:440px; }
+    .planwrap{ align-items:flex-start; }
+    figcaption, .legend{ position:sticky; left:0; }
+    figcaption{ font-size:.76rem; text-align:left; }
+  }
+  @media (max-width: 640px){
+    .fact{ padding-right:1.1rem; margin-right:1.1rem; }
+    .key{ grid-template-columns:2rem 1fr; gap:0 .9rem; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+
+<header class="masthead shell">
+  <div class="stack">
+    <p class="eyebrow">写真からの復元 ／ Photo to plan</p>
+    <h1>インダストリアルな1LDK</h1>
+    <p class="lede">
+      5枚の写真に写っている床仕上げの切り替わり、建具のかたち、天井を走るダクトの向き、
+      そして光の入り方から各室のつながりを読み取り、平面に起こした推定間取り図です。
+    </p>
+    <dl class="facts">
+      <div class="fact"><dt>間取り</dt><dd>1LDK</dd></div>
+      <div class="fact"><dt>専有面積</dt><dd>約56.0<small>㎡</small></dd></div>
+      <div class="fact"><dt>間口 × 奥行</dt><dd>6,200 × 8,600<small>mm</small></dd></div>
+      <div class="fact"><dt>主な仕上げ</dt><dd style="font-size:.92rem">躯体現し天井／モルタル床／無垢フローリング</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="shell">
+  <figure class="planwrap">
+    <!--PLAN_SVG-->
+    <figcaption>
+      丸数字は各写真の撮影位置と、そこから見ている方向を示します。<br>
+      下の一覧をクリックすると、対応する位置が図面上で強調されます。
+    </figcaption>
+    <div class="legend">
+      <div><span class="sw" style="background:var(--w-floor-wood)"></span>無垢フローリング</div>
+      <div><span class="sw" style="background:var(--w-floor-mortar)"></span>モルタル（土間・寝室）</div>
+      <div><span class="sw" style="background:var(--w-floor-tile)"></span>フロアタイル（水まわり）</div>
+      <div><span class="sw" style="background:var(--w-floor-bath)"></span>ユニットバス</div>
+      <div><span class="sw" style="background:var(--w-balcony)"></span>バルコニー</div>
+      <div><span class="sw" style="background:var(--w-accent);border-color:var(--w-accent)"></span>撮影位置と視野</div>
+    </div>
+  </figure>
+</div>
+
+<main class="shell">
+
+  <section>
+    <div class="sechead">
+      <p class="eyebrow">写真 ①–⑤</p>
+      <h2>それぞれの写真から、何を読み取ったか</h2>
+      <p>番号は図面上のマーカーと対応しています。各項目の下段は、その写真が平面のどこを確定させたかです。</p>
+    </div>
+
+    <ul class="keys">
+      <li>
+        <button class="key" type="button" data-cam="1">
+          <span class="keynum">1</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">玄関</span><span class="keyfile">IMG_0182</span></span>
+            <p>入ってすぐの土間はモルタル。左手の壁一面に可動レールのオープンシューズラック、右手には
+              バッグを掛けたハンガー掛けがあり、正面の廊下から先はフローリングに変わります。
+              廊下の左奥に白い開き戸が1枚。天井は躯体現しで、スパイラルダクトが奥へ抜けています。</p>
+            <ul class="reads">
+              <li>土間と居室の床の切り替わり位置</li>
+              <li>玄関を挟んで収納が両側にある</li>
+              <li>水まわりへの扉は廊下側</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="2">
+          <span class="keynum">2</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">LDK</span><span class="keyfile">IMG_0183</span></span>
+            <p>手前左からキッチンが奥へ伸びます。食洗機を組み込んだ対面カウンターと、その背後にもう一列の
+              バックカウンターがあるⅡ型。正面奥が掃き出し窓、右手にテレビと壁掛けエアコン。
+              天井はコンクリートの大梁が現しで、ライティングレールが渡してあります。</p>
+            <ul class="reads">
+              <li>キッチンはⅡ型で、窓と直交する向き</li>
+              <li>LDKの奥行が最も長い方向＝バルコニー側</li>
+              <li>キッチンとテレビが左右に振り分けられている</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="3">
+          <span class="keynum">3</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">寝室 兼 ワークスペース</span><span class="keyfile">IMG_0185</span></span>
+            <p>左にベッド、右にデスクとモニター。天井をスパイラルダクトが横切り、
+              壁は塗り仕上げの無地。ベッドとデスクが1つの短辺に収まる、小さな部屋です。</p>
+            <ul class="reads">
+              <li>寝室の幅は、ベッド＋通路＋デスクで約2.7m</li>
+              <li>ベッドとデスクは向かい合う壁付け</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="4">
+          <span class="keynum">4</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">LDK から寝室を見る</span><span class="keyfile">IMG_0186</span></span>
+            <p>手前は濃色のフローリング、そこから段差を介して寝室のモルタル床へ。
+              左手は躯体現しのコンクリート壁で、フックにバッグとコートが掛かっています。
+              奥左にクローゼット、その先にベッド。右手には本棚と、開口の袖壁。</p>
+            <ul class="reads">
+              <li>LDKと寝室が直接つながる（大開口の引戸）</li>
+              <li>寝室の床はモルタルで、LDKより一段低い</li>
+              <li>クローゼットは寝室の奥＝玄関側にある</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="key" type="button" data-cam="5">
+          <span class="keynum">5</span>
+          <span class="keybody">
+            <span class="keytitle"><span class="keyroom">クローゼット</span><span class="keyfile">IMG_0187</span></span>
+            <p>手前に大判の引戸が1枚。奥行の浅いニッチに可動棚とハンガーパイプが納まり、衣類が掛かっています。
+              背後にはライティングレールの付いた躯体現し天井と、明るい窓。
+              ④で見えたクローゼットを、寝室側から見た位置関係と読めます。</p>
+            <ul class="reads">
+              <li>クローゼットは引戸で仕切られる</li>
+              <li>玄関側と寝室側の両方から出入りできる配置</li>
+            </ul>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <p class="eyebrow">面積表</p>
+      <h2>各室の想定寸法</h2>
+      <p>寸法はすべて内法。帖数は1帖＝1.62㎡で換算しています。</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <caption>数値は写真から起こした推定値であり、実測に基づくものではありません。</caption>
+        <thead>
+          <tr>
+            <th scope="col">室名</th>
+            <th scope="col" class="num">内法寸法 mm</th>
+            <th scope="col" class="num">面積 ㎡</th>
+            <th scope="col" class="num">帖</th>
+            <th scope="col">床仕上げ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">LDK</th><td class="num">－</td><td class="num">26.56</td><td class="num">16.4</td><td>無垢フローリング</td></tr>
+          <tr><th scope="row">寝室 兼 ワークスペース</th><td class="num">2,700 × 3,500</td><td class="num">9.45</td><td class="num">5.8</td><td>モルタル</td></tr>
+          <tr><th scope="row">ホール</th><td class="num">2,500 × 1,550</td><td class="num">3.88</td><td class="num">2.4</td><td>無垢フローリング</td></tr>
+          <tr><th scope="row">WIC</th><td class="num">2,000 × 1,850</td><td class="num">3.70</td><td class="num">2.3</td><td>無垢フローリング</td></tr>
+          <tr><th scope="row">浴室<span class="sub">（1616）</span></th><td class="num">1,600 × 1,600</td><td class="num">2.56</td><td class="num">1.6</td><td>ユニットバス</td></tr>
+          <tr><th scope="row">玄関<span class="sub">（土間）</span></th><td class="num">1,500 × 1,650</td><td class="num">2.48</td><td class="num">1.5</td><td>モルタル</td></tr>
+          <tr><th scope="row">洗面脱衣室</th><td class="num">1,600 × 1,500</td><td class="num">2.40</td><td class="num">1.5</td><td>フロアタイル</td></tr>
+          <tr><th scope="row">トイレ</th><td class="num">800 × 1,650</td><td class="num">1.32</td><td class="num">0.8</td><td>フロアタイル</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>室面積 計</td><td class="num">－</td><td class="num">52.35</td><td class="num">32.3</td>
+            <td class="sub">壁厚を含む専有面積 約56.0㎡</td>
+          </tr>
+          <tr>
+            <td>バルコニー</td><td class="num">6,200 × 1,350</td><td class="num">8.37</td><td class="num">－</td><td class="sub">面積に含まず</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <p class="eyebrow">確度</p>
+      <h2>どこまでが写真で、どこからが推定か</h2>
+      <p>この図は写真を根拠にした復元であって、実測図ではありません。判断の確からしさは3段階に分かれます。</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tierhead">
+          <span class="bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span></span>
+          <h3>写真に直接写っている</h3>
+        </div>
+        <ul>
+          <li>玄関土間と寝室がモルタル、その他がフローリングという床の使い分け</li>
+          <li>LDKと寝室が大開口の引戸で直接つながり、床に段差があること</li>
+          <li>キッチンがⅡ型で、食洗機とレンジフードを備えること</li>
+          <li>天井が躯体現しで、スパイラルダクトとライティングレールが露出していること</li>
+          <li>玄関の片側がオープンのシューズラック、反対側がハンガー掛けであること</li>
+          <li>寝室にベッドとデスクが向かい合わせに納まること</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tierhead">
+          <span class="bars"><span class="bar on"></span><span class="bar on"></span><span class="bar"></span></span>
+          <h3>位置関係から妥当に推定</h3>
+        </div>
+        <ul>
+          <li>玄関 → ホール → LDK と抜け、寝室がLDKに隣接する並び順</li>
+          <li>クローゼットが玄関と寝室の間にあり、両側から使えること</li>
+          <li>掃き出し窓の先がバルコニーで、そこがLDKの最奥であること</li>
+          <li>水まわりを玄関の片側にまとめた配置</li>
+          <li>寝室の幅が2.7m前後、LDKが16帖前後という規模感</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tierhead">
+          <span class="bars"><span class="bar on"></span><span class="bar"></span><span class="bar"></span></span>
+          <h3>写真からは決められず、仮に置いた</h3>
+        </div>
+        <ul>
+          <li><strong>すべての寸法と面積。</strong>一般的なマンションの寸法から矛盾なく置いた値です</li>
+          <li><strong>浴室・洗面脱衣室・トイレ。</strong>5枚のいずれにも写っておらず、位置も大きさも仮定です</li>
+          <li>寝室の窓の有無と位置。⑤の明るさから外部開口を想定しました</li>
+          <li>方位。判断材料がないため、バルコニー側を下として作図しています</li>
+          <li>玄関ドアの吊元と開き勝手</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="shell">
+  <p>
+    出典：Instagram <span style="font-family:var(--f-mono)">@renoveru</span> のストーリーズ投稿のスクリーンショット5枚（IMG_0182 / 0183 / 0185 / 0186 / 0187）より作図。
+    本図は写真をもとに第三者が起こした非公式の推定復元図であり、実際の物件図面ではありません。
+    なお①の梁には「3,900」の墨書きが見えますが、記入の意図が特定できないため本図の寸法には反映していません。
+  </p>
+</footer>
+
+<script>
+  (function () {
+    var keys = document.querySelectorAll('.key');
+    var cams = document.querySelectorAll('#cams .cam');
+    var active = null;
+
+    function highlight(n) {
+      active = n;
+      cams.forEach(function (c) {
+        c.classList.toggle('dim', n !== null && c.id !== 'cam' + n);
+      });
+    }
+
+    keys.forEach(function (k) {
+      var n = k.getAttribute('data-cam');
+      k.addEventListener('mouseenter', function () { highlight(n); });
+      k.addEventListener('focus', function () { highlight(n); });
+      k.addEventListener('mouseleave', function () { if (active === n) highlight(null); });
+      k.addEventListener('blur', function () { if (active === n) highlight(null); });
+      k.addEventListener('click', function () {
+        highlight(n);
+        var svg = document.querySelector('.planwrap svg');
+        if (svg) svg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  })();
+</script>
