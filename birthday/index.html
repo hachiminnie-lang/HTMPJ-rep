@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>おひとり様誕生日 ご褒美プラン｜全6ルート</title>
+</head>
+<body>
+<style>
+  /* Six routes out of one hub, all converging on an 18:00 dinner: the page is
+     built like a set of rail lines. Each route keeps one colour throughout —
+     board row, station dots, timeline — so colour alone tells you where you
+     are. Everything around it stays neutral so the six can be told apart.
+     明朝 carries the personal register (title, destinations), ゴシック the
+     operational one (times, labels). No @font-face: a Japanese webfont is
+     megabytes, so the stacks below are chosen to degrade gracefully. */
+
+  :root {
+    color-scheme: light;
+    --paper: #eff1f0;
+    --surface: #fbfcfb;
+    --surface-2: #f3f5f4;
+    --ink: #141b1b;
+    --ink-2: #46514f;
+    --ink-3: #78837f;
+    --rule: #d7dbd9;
+    --accent: #0f6c63;
+    --accent-soft: #e2eeec;
+    --l1: #2f6bd6;
+    --l2: #8a5a34;
+    --l3: #1e8a5f;
+    --l4: #a97705;
+    --l5: #c23c3c;
+    --l6: #7350c4;
+    --font-body: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+      "Yu Gothic", YuGothic, "Noto Sans JP", Meiryo, system-ui, sans-serif;
+    --font-display: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP",
+      "Shippori Mincho", serif;
+    --font-num: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgb(20 27 27 / 5%), 0 14px 30px -24px rgb(20 27 27 / 55%);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --paper: #101413;
+      --surface: #171d1c;
+      --surface-2: #1d2423;
+      --ink: #e9edeb;
+      --ink-2: #a8b3b0;
+      --ink-3: #78837f;
+      --rule: #2b3331;
+      --accent: #5fd3c2;
+      --accent-soft: #17302d;
+      --l1: #85b1ff;
+      --l2: #d19a6c;
+      --l3: #5fd39f;
+      --l4: #eec052;
+      --l5: #f79089;
+      --l6: #b8a0f7;
+      --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 30px -24px rgb(0 0 0 / 80%);
+    }
+  }
+
+  /* The viewer's own toggle has to win over the OS preference both ways. */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --paper: #eff1f0;
+    --surface: #fbfcfb;
+    --surface-2: #f3f5f4;
+    --ink: #141b1b;
+    --ink-2: #46514f;
+    --ink-3: #78837f;
+    --rule: #d7dbd9;
+    --accent: #0f6c63;
+    --accent-soft: #e2eeec;
+    --l1: #2f6bd6;
+    --l2: #8a5a34;
+    --l3: #1e8a5f;
+    --l4: #a97705;
+    --l5: #c23c3c;
+    --l6: #7350c4;
+    --shadow: 0 1px 2px rgb(20 27 27 / 5%), 0 14px 30px -24px rgb(20 27 27 / 55%);
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #101413;
+    --surface: #171d1c;
+    --surface-2: #1d2423;
+    --ink: #e9edeb;
+    --ink-2: #a8b3b0;
+    --ink-3: #78837f;
+    --rule: #2b3331;
+    --accent: #5fd3c2;
+    --accent-soft: #17302d;
+    --l1: #85b1ff;
+    --l2: #d19a6c;
+    --l3: #5fd39f;
+    --l4: #eec052;
+    --l5: #f79089;
+    --l6: #b8a0f7;
+    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 30px -24px rgb(0 0 0 / 80%);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--paper);
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-text-size-adjust: 100%;
+    /* Keep 禁則処理: no small kana or closing bracket stranded at line start. */
+    line-break: strict;
+    word-break: normal;
+  }
+
+  .page {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.15rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  :is(a, button, summary):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .num {
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── masthead ─────────────────────────────────────────────── */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+  }
+
+  .masthead h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 8.5vw, 2.9rem);
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+
+  .ribbon {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    height: 5px;
+  }
+
+  .ribbon span {
+    background: var(--c);
+    border-radius: 1px;
+  }
+
+  .standfirst {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.98rem;
+  }
+
+  /* ── section furniture ────────────────────────────────────── */
+
+  .section-h {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-h::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+
+  /* ── departure board ──────────────────────────────────────── */
+
+  .board {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    --sym: 2.35rem;
+    --sym-gap: 0.8rem;
+  }
+
+  .board-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .sym {
+    width: var(--sym);
+    height: var(--sym);
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--line);
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--line) 12%, transparent);
+    color: var(--line);
+    font-family: var(--font-num);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .row,
+  .axis {
+    display: grid;
+    grid-template-columns: var(--sym) 1fr;
+    gap: 0 var(--sym-gap);
+    align-items: start;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .axis {
+    padding-block: 0 0.1rem;
+    /* Matches the row border below, so the labels sit over the bands. */
+    border: 1px solid transparent;
+    border-block: none;
+  }
+
+  .axis-track {
+    position: relative;
+    height: 1rem;
+    font-size: 0.68rem;
+    color: var(--ink-3);
+  }
+
+  .axis-track i {
+    position: absolute;
+    top: 0;
+    font-style: normal;
+    white-space: nowrap;
+  }
+
+  .axis-track i:nth-child(1) { left: 0; }
+  .axis-track i:nth-child(2) { left: 45.45%; transform: translateX(-50%); }
+  .axis-track i:nth-child(3) { right: 0; }
+
+  .row {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 0.7rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  @media (hover: hover) {
+    .row:hover {
+      border-color: color-mix(in srgb, var(--line) 55%, var(--rule));
+      transform: translateY(-1px);
+    }
+  }
+
+  .row-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .dest {
+    font-family: var(--font-display);
+    font-size: 1.18rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .day {
+    flex: none;
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    line-height: 1.6;
+    background: var(--surface-2);
+  }
+
+  .day.is-limited {
+    color: var(--l4);
+    border-color: color-mix(in srgb, var(--l4) 45%, transparent);
+    background: color-mix(in srgb, var(--l4) 10%, transparent);
+    font-weight: 700;
+  }
+
+  .row-meta {
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  /* Each fact stays whole, and the separator rides on the end of the segment
+     before it, so a wrap never opens a line with a stray middle dot. */
+  .row-meta .seg {
+    white-space: nowrap;
+  }
+
+  .row-meta .seg:not(:last-child)::after {
+    content: "·";
+    color: var(--ink-3);
+    padding: 0 0.4rem;
+  }
+
+  /* 7:00 → 18:00. The filled part is the day; each tick is a stop; the bar at
+     the right edge is the 18:00 dinner every route shares. */
+  .band {
+    position: relative;
+    display: block;
+    height: 0.42rem;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    margin-top: 0.15rem;
+  }
+
+  .band-fill {
+    position: absolute;
+    inset: 0 0 0 auto;
+    right: 0;
+    background: color-mix(in srgb, var(--line) 30%, transparent);
+  }
+
+  .band i {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--line);
+    border-radius: 1px;
+  }
+
+  .band::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    right: -1px;
+    width: 2px;
+    background: var(--ink-3);
+  }
+
+  /* ── routes ───────────────────────────────────────────────── */
+
+  .routes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .route {
+    --sym: 2.35rem;
+    scroll-margin-top: 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--line);
+    border-radius: 0.7rem;
+    padding: 1.35rem 1.15rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .route-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .route-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .eyebrow:empty {
+    display: none;
+  }
+
+  .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+  }
+
+  .badge {
+    color: var(--line);
+    font-weight: 700;
+  }
+
+  .theme {
+    color: var(--ink-3);
+  }
+
+  .route h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.32rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+
+  .facts {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.6rem;
+    padding: 0.8rem 0;
+    border-block: 1px solid var(--rule);
+  }
+
+  .facts dt {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  /* ── timeline ─────────────────────────────────────────────── */
+
+  .timeline {
+    --time-w: 3.3rem;
+    --gutter: 1.9rem;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Starts at the first dot's centre and stops dead at the terminus dot:
+     1.2rem is that dot's offset (0.42 padding + 0.48 margin + 0.3 radius). */
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 1.2rem;
+    bottom: 1.2rem;
+    left: calc(var(--time-w) + var(--gutter) / 2 - 1px);
+    width: 2px;
+    background: color-mix(in srgb, var(--line) 38%, transparent);
+  }
+
+  .stop {
+    display: grid;
+    grid-template-columns: var(--time-w) var(--gutter) 1fr;
+    align-items: start;
+    padding: 0.42rem 0;
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  /* All three sit on one row — placed explicitly, because sparse auto-flow
+     would push the time and the text below the dot. The dot's margin lands
+     it on the centre of the first line. */
+  .stop::before {
+    content: "";
+    grid-area: 1 / 2;
+    justify-self: center;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-top: 0.44rem;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    position: relative;
+    z-index: 1;
+  }
+
+  .stop .t {
+    grid-area: 1 / 1;
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  .stop .what {
+    grid-area: 1 / 3;
+    min-width: 0;
+  }
+
+  .stop-end::before {
+    background: var(--ink);
+    border-color: var(--ink);
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0.43rem;
+  }
+
+  .stop-end {
+    margin-top: 0.2rem;
+  }
+
+  .stop-end .t,
+  .stop-end .what {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* ── closing blocks ───────────────────────────────────────── */
+
+  .note {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    padding: 1rem 1.15rem;
+    border: 1px dashed var(--rule);
+    border-radius: 0.7rem;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+
+  .note b {
+    flex: none;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .save {
+    background: var(--accent-soft);
+    border-radius: 0.7rem;
+    padding: 1.35rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .save h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .save p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+
+  #copy {
+    align-self: flex-start;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--paper);
+    background: var(--accent);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  #copy:hover {
+    opacity: 0.88;
+  }
+
+  #copy[data-state="done"] {
+    background: var(--ink);
+  }
+
+  .save details {
+    font-size: 0.85rem;
+  }
+
+  .save summary {
+    cursor: pointer;
+    color: var(--accent);
+    width: fit-content;
+  }
+
+  #line-text {
+    margin: 0.7rem 0 0;
+    max-height: 16rem;
+    overflow: auto;
+    padding: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    line-height: 1.85;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    -webkit-user-select: all;
+    user-select: all;
+  }
+
+  .foot {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    line-height: 1.8;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.2rem;
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  @media (max-width: 23rem) {
+    .timeline {
+      --time-w: 2.9rem;
+      --gutter: 1.6rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    * {
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<main class="page">
+  <header class="masthead">
+    <p class="kicker">2026年8月・有給／全6ルート</p>
+    <h1>おひとり様<br />誕生日ご褒美プラン</h1>
+    <div class="ribbon" aria-hidden="true">
+      <span style="--c: var(--l1)"></span>
+      <span style="--c: var(--l2)"></span>
+      <span style="--c: var(--l3)"></span>
+      <span style="--c: var(--l4)"></span>
+      <span style="--c: var(--l5)"></span>
+      <span style="--c: var(--l6)"></span>
+    </div>
+    <p class="standfirst">夜の池袋ディナー（18:00合流）に向けて、日中を最高のコンディションで過ごすための6つのルートです。</p>
+  </header>
+
+  <section class="board" aria-labelledby="board-h">
+    <h2 class="section-h" id="board-h">行き先ボード</h2>
+    <p class="hint">帯は 7:00〜18:00 の1日。色が付いた部分が動いている時間、縦の目盛りが立ち寄り先、右端の線が全ルート共通の 18:00 合流です。</p>
+    <div class="board-list">
+      <p class="axis" aria-hidden="true">
+        <span></span>
+        <span class="axis-track num"><i>7時</i><i>12時</i><i>18時</i></span>
+      </p>
+      <a class="row" href="#route-1" style="--line:var(--l1)">
+        <span class="sym">1</span>
+        <span class="row-main">
+          <span class="row-head">
+            <span class="dest">池袋</span>
+            <span class="day">いつでも</span>
+          </span>
+          <span class="row-meta"><span class="seg">徒歩のみ</span><span class="seg">追加料金なし</span><span class="seg"><span class="num">11:30</span> スタート</span></span>
+          <span class="band" aria-hidden="true"><span class="band-fill" style="left:40.91%"></span><i style="left:40.91%"></i><i style="left:45.45%"></i><i style="left:59.09%"></i><i style="left:77.27%"></i><i style="left:90.91%"></i></span>
+        </span>
+      </a>
+      <a class="row" href="#route-2" style="--line:var(--l2)">
+        <span class="sym">2</span>
+        <span class="row-main">
+          <span class="row-head">
+            <span class="dest">目白・雑司が谷</span>
+            <span class="day">いつでも</span>
+          </span>
+          <span class="row-meta"><span class="seg">JR1駅・都電</span><span class="seg">追加料金なし</span><span class="seg"><span class="num">11:00</span> スタート</span></span>
+          <span class="band" aria-hidden="true"><span class="band-fill" style="left:36.36%"></span><i style="left:36.36%"></i><i style="left:45.45%"></i><i style="left:63.64%"></i><i style="left:72.73%"></i><i style="left:81.82%"></i><i style="left:95.45%"></i></span>
+        </span>
+      </a>
+      <a class="row" href="#route-3" style="--line:var(--l3)">
+        <span class="sym">3</span>
+        <span class="row-main">
+          <span class="row-head">
+            <span class="dest">鎌倉</span>
+            <span class="day">いつでも</span>
+          </span>
+          <span class="row-meta"><span class="seg">湘南新宿ライン 約1時間</span><span class="seg">グリーン券</span><span class="seg"><span class="num">10:30</span> スタート</span></span>
+          <span class="band" aria-hidden="true"><span class="band-fill" style="left:31.82%"></span><i style="left:31.82%"></i><i style="left:34.09%"></i><i style="left:40.91%"></i><i style="left:45.45%"></i><i style="left:52.27%"></i><i style="left:68.18%"></i><i style="left:77.27%"></i></span>
+        </span>
+      </a>
+      <a class="row" href="#route-4" style="--line:var(--l4)">
+        <span class="sym">4</span>
+        <span class="row-main">
+          <span class="row-head">
+            <span class="dest">館山</span>
+            <span class="day is-limited">土日祝のみ</span>
+          </span>
+          <span class="row-meta"><span class="seg">特急さざなみ 2時間6分</span><span class="seg">指定席 +1,360円</span><span class="seg"><span class="num">07:50</span> スタート</span></span>
+          <span class="band" aria-hidden="true"><span class="band-fill" style="left:7.58%"></span><i style="left:7.58%"></i><i style="left:31.82%"></i><i style="left:40.91%"></i><i style="left:63.64%"></i><i style="left:81.82%"></i></span>
+        </span>
+      </a>
+      <a class="row" href="#route-5" style="--line:var(--l5)">
+        <span class="sym">5</span>
+        <span class="row-main">
+          <span class="row-head">
+            <span class="dest">千葉・幕張</span>
+            <span class="day">平日向き</span>
+          </span>
+          <span class="row-meta"><span class="seg">成田エクスプレス 45分</span><span class="seg">指定席 +1,290円</span><span class="seg"><span class="num">10:30</span> スタート</span></span>
+          <span class="band" aria-hidden="true"><span class="band-fill" style="left:31.82%"></span><i style="left:31.82%"></i><i style="left:40.91%"></i><i style="left:54.55%"></i><i style="left:59.09%"></i><i style="left:86.36%"></i></span>
+        </span>
+      </a>
+      <a class="row" href="#route-6" style="--line:var(--l6)">
+        <span class="sym">6</span>
+        <span class="row-main">
+          <span class="row-head">
+            <span class="dest">大洗・水戸</span>
+            <span class="day">いつでも</span>
+          </span>
+          <span class="row-meta"><span class="seg">特急ひたち 1時間30分</span><span class="seg">指定席 +1,580円</span><span class="seg"><span class="num">09:30</span> スタート</span></span>
+          <span class="band" aria-hidden="true"><span class="band-fill" style="left:22.73%"></span><i style="left:22.73%"></i><i style="left:40.91%"></i><i style="left:54.55%"></i><i style="left:68.18%"></i><i style="left:83.33%"></i></span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <div class="routes">
+    <section class="route" id="route-1" style="--line:var(--l1)">
+        <header class="route-head">
+          <span class="sym">1</span>
+          <div class="route-titles">
+            <span class="eyebrow"></span>
+            <h2>移動ゼロ！池袋サンシャインおこもりルート</h2>
+          </div>
+        </header>
+        <p class="lede">移動を最小限に抑え、1日中涼しいビルの中で絶景と癒やしを独り占めするプラン。</p>
+        <dl class="facts">
+          <div><dt>移動</dt><dd>徒歩のみ</dd></div>
+          <div><dt>きっぷ</dt><dd>追加料金なし</dd></div>
+          <div><dt>曜日</dt><dd>いつでも</dd></div>
+        </dl>
+        <ol class="timeline">
+          <li class="stop">
+            <span class="t num">11:30</span>
+            <span class="what"><a href="https://sunshinecity.jp/observatory/" target="_blank" rel="noopener">てんぼうパーク サンシャイン60展望台</a>（550本のひまわり夏イベント開催中）</span>
+          </li>
+          <li class="stop">
+            <span class="t num">12:00</span>
+            <span class="what"><a href="https://sunshinecity.jp/observatory/restaurant/restaurant_list/entry-6772.html" target="_blank" rel="noopener">てんぼうパークCAFE</a> で絶景を眺めながらソロランチ</span>
+          </li>
+          <li class="stop">
+            <span class="t num">13:30</span>
+            <span class="what"><a href="https://sunshinecity.jp/aquarium/" target="_blank" rel="noopener">サンシャイン水族館</a> で「天空のペンギン」に癒やされる（WEBチケット事前購入が◎）</span>
+          </li>
+          <li class="stop">
+            <span class="t num">15:30</span>
+            <span class="what">タカノフルーツパーラー 池袋東武店 で8月限定の贅沢「桃パフェ」</span>
+          </li>
+          <li class="stop">
+            <span class="t num">17:00</span>
+            <span class="what">東武百貨店などの綺麗なパウダールームでお色直し</span>
+          </li>
+          <li class="stop stop-end">
+            <span class="t num">18:00</span>
+            <span class="what">池袋で合流</span>
+          </li>
+        </ol>
+      </section>
+      <section class="route" id="route-2" style="--line:var(--l2)">
+        <header class="route-head">
+          <span class="sym">2</span>
+          <div class="route-titles">
+            <span class="eyebrow"></span>
+            <h2>好きを巡る！目白・雑司が谷大人チルルート</h2>
+          </div>
+        </header>
+        <p class="lede">文房具、本、スコーン、雑貨が好きなあなたへ。池袋の隣町で静かな大人の隠れ家を巡るプラン。</p>
+        <dl class="facts">
+          <div><dt>移動</dt><dd>JR1駅・都電</dd></div>
+          <div><dt>きっぷ</dt><dd>追加料金なし</dd></div>
+          <div><dt>曜日</dt><dd>いつでも</dd></div>
+        </dl>
+        <ol class="timeline">
+          <li class="stop">
+            <span class="t num">11:00</span>
+            <span class="what">目白駅スタート ＆ 焼き菓子調達</span>
+          </li>
+          <li class="stop">
+            <span class="t num">12:00</span>
+            <span class="what">CAFE CUPOLA mejiro で芸術的なフルーツパフェランチ</span>
+          </li>
+          <li class="stop">
+            <span class="t num">14:00</span>
+            <span class="what">雑司が谷 旅猫雑貨店 でレトロ可愛い和雑貨＆文房具ハント</span>
+          </li>
+          <li class="stop">
+            <span class="t num">15:00</span>
+            <span class="what">うぐいす書房などの古書・個性派本屋さんで運命の1冊を探す</span>
+          </li>
+          <li class="stop">
+            <span class="t num">16:00</span>
+            <span class="what">古民家カフェ キアズマ珈琲 で絶品スコーン＆珈琲をお供に読書</span>
+          </li>
+          <li class="stop">
+            <span class="t num">17:30</span>
+            <span class="what">タクシーや都電で涼しく移動</span>
+          </li>
+          <li class="stop stop-end">
+            <span class="t num">18:00</span>
+            <span class="what">池袋で合流</span>
+          </li>
+        </ol>
+      </section>
+      <section class="route" id="route-3" style="--line:var(--l3)">
+        <header class="route-head">
+          <span class="sym">3</span>
+          <div class="route-titles">
+            <span class="eyebrow"><span class="badge">特急1本</span></span>
+            <h2>ときめき鎌倉ルート（8/17月曜対応）</h2>
+          </div>
+        </header>
+        <p class="lede">池袋から湘南新宿ラインのグリーン車でビュンと1時間！大好きな雑貨や焼き菓子が徒歩圏内にギュッと詰まった王道旅。</p>
+        <dl class="facts">
+          <div><dt>移動</dt><dd>湘南新宿ライン 約1時間</dd></div>
+          <div><dt>きっぷ</dt><dd>グリーン券</dd></div>
+          <div><dt>曜日</dt><dd>いつでも</dd></div>
+        </dl>
+        <ol class="timeline">
+          <li class="stop">
+            <span class="t num">10:30</span>
+            <span class="what">鎌倉駅到着（往復グリーン車で読書＆身支度空間を確保）</span>
+          </li>
+          <li class="stop">
+            <span class="t num">10:45</span>
+            <span class="what"><a href="http://www.kamakurakotori.com/" target="_blank" rel="noopener">鎌倉コトリ</a> でレトロ可愛い紙もの文房具ハント</span>
+          </li>
+          <li class="stop">
+            <span class="t num">11:30</span>
+            <span class="what">たらば書房 でお洒落なセレクトの本を選ぶ</span>
+          </li>
+          <li class="stop">
+            <span class="t num">12:00</span>
+            <span class="what"><a href="https://www.romi-unie.jp/" target="_blank" rel="noopener">ロミ・ユニ コンフィチュール</a> でご褒美スコーン＆ジャム物色</span>
+          </li>
+          <li class="stop">
+            <span class="t num">12:45</span>
+            <span class="what">GARDEN HOUSE Kamakura で緑に囲まれて贅沢ランチ</span>
+          </li>
+          <li class="stop">
+            <span class="t num">14:30</span>
+            <span class="what"><a href="https://www.bam-kamakura.com/" target="_blank" rel="noopener">英国アンティーク博物館 BAM鎌倉</a> で涼しくアンティーク雑貨の世界に浸る</span>
+          </li>
+          <li class="stop">
+            <span class="t num">15:30</span>
+            <span class="what">カフェ・ディモンシュ でこだわりの珈琲とスイーツ</span>
+          </li>
+          <li class="stop stop-end">
+            <span class="t num">18:00</span>
+            <span class="what">池袋で合流</span>
+          </li>
+        </ol>
+      </section>
+      <section class="route" id="route-4" style="--line:var(--l4)">
+        <header class="route-head">
+          <span class="sym">4</span>
+          <div class="route-titles">
+            <span class="eyebrow"><span class="badge">特急1本</span><span class="theme">海と貝と寿司</span></span>
+            <h2>南房総・館山ルート</h2>
+          </div>
+        </header>
+        <p class="lede">池袋から特急「新宿さざなみ」で直行！穏やかな海を眺めながら、獲れたての貝とお寿司を堪能するプラン。（土日祝運行）</p>
+        <dl class="facts">
+          <div><dt>移動</dt><dd>特急さざなみ 2時間6分</dd></div>
+          <div><dt>きっぷ</dt><dd>指定席 +1,360円</dd></div>
+          <div><dt>曜日</dt><dd>土日祝のみ</dd></div>
+        </dl>
+        <ol class="timeline">
+          <li class="stop">
+            <span class="t num">07:50</span>
+            <span class="what">池袋駅から特急乗車（指定席＋1,360円）➔ 09:56 館山駅到着</span>
+          </li>
+          <li class="stop">
+            <span class="t num">10:30</span>
+            <span class="what">目の前に広がる青い海を見ながら海岸散歩</span>
+          </li>
+          <li class="stop">
+            <span class="t num">11:30</span>
+            <span class="what">高台の隠れ家 すし処 と貝 で海を眺めながら絶品の貝・地魚寿司</span>
+          </li>
+          <li class="stop">
+            <span class="t num">14:00</span>
+            <span class="what">館山なぎさ食堂 のテラス席で珈琲タイム＆1階で特産品お土産ハント</span>
+          </li>
+          <li class="stop">
+            <span class="t num">16:00</span>
+            <span class="what">特急または高速バスで池袋へ（車内でメイク直し）</span>
+          </li>
+          <li class="stop stop-end">
+            <span class="t num">18:00</span>
+            <span class="what">池袋で合流</span>
+          </li>
+        </ol>
+      </section>
+      <section class="route" id="route-5" style="--line:var(--l5)">
+        <header class="route-head">
+          <span class="sym">5</span>
+          <div class="route-titles">
+            <span class="eyebrow"><span class="badge">特急45分</span><span class="theme">海と貝と寿司</span></span>
+            <h2>千葉港・オーシャンビュー温泉ルート</h2>
+          </div>
+        </header>
+        <p class="lede">池袋から成田エクスプレスでビュン！平日有給に最適。超穴場のカウンター寿司と、海一望の絶景露天風呂を欲張るプラン。</p>
+        <dl class="facts">
+          <div><dt>移動</dt><dd>成田エクスプレス 45分</dd></div>
+          <div><dt>きっぷ</dt><dd>指定席 +1,290円</dd></div>
+          <div><dt>曜日</dt><dd>平日向き</dd></div>
+        </dl>
+        <ol class="timeline">
+          <li class="stop">
+            <span class="t num">10:30</span>
+            <span class="what">池袋駅から特急乗車（指定席＋1,290円）➔ 11:15 千葉駅到着</span>
+          </li>
+          <li class="stop">
+            <span class="t num">11:30</span>
+            <span class="what"><a href="https://www.choushimaru.co.jp/" target="_blank" rel="noopener">すし銚子丸 千葉駅前店</a>（ほぼ全席カウンターの穴場店。1人で活さざえやツブ貝を頼みまくる）</span>
+          </li>
+          <li class="stop">
+            <span class="t num">13:00</span>
+            <span class="what">モノレールで海沿いの「千葉みなと駅」へ</span>
+          </li>
+          <li class="stop">
+            <span class="t num">13:30</span>
+            <span class="what">幕張温泉 湯楽の里 で東京湾一望の絶景露天風呂＆綺麗なパウダールームで完璧な身支度</span>
+          </li>
+          <li class="stop">
+            <span class="t num">16:30</span>
+            <span class="what">千葉駅から特急でリラックス</span>
+          </li>
+          <li class="stop stop-end">
+            <span class="t num">18:00</span>
+            <span class="what">池袋で合流</span>
+          </li>
+        </ol>
+      </section>
+      <section class="route" id="route-6" style="--line:var(--l6)">
+        <header class="route-head">
+          <span class="sym">6</span>
+          <div class="route-titles">
+            <span class="eyebrow"><span class="badge">夏が旬！</span><span class="theme">海と貝と寿司</span></span>
+            <h2>大洗・巨大岩牡蠣＆市場寿司ルート</h2>
+          </div>
+        </header>
+        <p class="lede">特急「ひたち」で水戸へ！8月に最も旬を迎える、超大粒の「天然岩牡蠣」と「ハマグリ」を求めて茨城へ向かうガッツリグルメ旅。</p>
+        <dl class="facts">
+          <div><dt>移動</dt><dd>特急ひたち 1時間30分</dd></div>
+          <div><dt>きっぷ</dt><dd>指定席 +1,580円</dd></div>
+          <div><dt>曜日</dt><dd>いつでも</dd></div>
+        </dl>
+        <ol class="timeline">
+          <li class="stop">
+            <span class="t num">09:30</span>
+            <span class="what">池袋から上野へ移動、特急「ひたち」乗車（指定席＋1,580円）➔ 11:00 水戸駅到着</span>
+          </li>
+          <li class="stop">
+            <span class="t num">11:30</span>
+            <span class="what"><a href="https://www.oarai-kaisen.com/" target="_blank" rel="noopener">大洗海鮮市場</a> 軒先で剥きたての巨大岩牡蠣や焼きハマグリを1人食べ歩き</span>
+          </li>
+          <li class="stop">
+            <span class="t num">13:00</span>
+            <span class="what">市場寿し 那珂湊店 でネタがはみ出る豪快な貝・地魚寿司</span>
+          </li>
+          <li class="stop">
+            <span class="t num">14:30</span>
+            <span class="what">大洗磯前神社 で、波が打ち付ける海の上の白い鳥居を参拝</span>
+          </li>
+          <li class="stop">
+            <span class="t num">16:10</span>
+            <span class="what">水戸駅から最新特急で快適にお色直し</span>
+          </li>
+          <li class="stop stop-end">
+            <span class="t num">18:00</span>
+            <span class="what">池袋で合流</span>
+          </li>
+        </ol>
+      </section>
+  </div>
+
+  <aside class="note"><b>共通の持ち物</b><span>室内の冷房対策に、薄手のカーディガンをバッグに入れておくと安心です。</span></aside>
+
+  <section class="save" aria-labelledby="save-h">
+    <h2 class="section-h" id="save-h">LINEに保存する</h2>
+    <p>6ルートぶんの文面をそのままコピーできます。ノートや自分宛てのトークに貼り付けてお使いください。</p>
+    <button id="copy" type="button">文面をコピー</button>
+    <details>
+      <summary>貼り付ける文面を見る</summary>
+      <pre id="line-text">## 🎂【8月有給】おひとり様誕生日ご褒美プラン全集 ✨
+夜の池袋ディナー（18:00合流）に向けて、日中を最高のコンディションで過ごすための6つのルートです。
+------------------------------
+## 🟦 1. 移動ゼロ！池袋サンシャインおこもりルート
+移動を最小限に抑え、1日中涼しいビルの中で絶景と癒やしを独り占めするプラン。
+
+* 11:30：[てんぼうパーク サンシャイン60展望台](https://sunshinecity.jp/observatory/)（550本のひまわり夏イベント開催中）
+* 12:00：[てんぼうパークCAFE](https://sunshinecity.jp/observatory/restaurant/restaurant_list/entry-6772.html) で絶景を眺めながらソロランチ
+* 13:30：[サンシャイン水族館](https://sunshinecity.jp/aquarium/) で「天空のペンギン」に癒やされる（WEBチケット事前購入が◎）
+* 15:30：タカノフルーツパーラー 池袋東武店 で8月限定の贅沢「桃パフェ」
+* 17:00：東武百貨店などの綺麗なパウダールームでお色直し ➔ 18:00 池袋で合流
+
+------------------------------
+## 🟫 2. 好きを巡る！目白・雑司が谷大人チルルート
+文房具、本、スコーン、雑貨が好きなあなたへ。池袋の隣町で静かな大人の隠れ家を巡るプラン。
+
+* 11:00：目白駅スタート ＆ 焼き菓子調達
+* 12:00：CAFE CUPOLA mejiro で芸術的なフルーツパフェランチ
+* 14:00：雑司が谷 旅猫雑貨店 でレトロ可愛い和雑貨＆文房具ハント
+* 15:00：うぐいす書房などの古書・個性派本屋さんで運命の1冊を探す
+* 16:00：古民家カフェ キアズマ珈琲 で絶品スコーン＆珈琲をお供に読書
+* 17:30：タクシーや都電で涼しく移動 ➔ 18:00 池袋で合流
+
+------------------------------
+## 🟩 3. 【特急1本】ときめき鎌倉ルート（8/17月曜対応）
+池袋から湘南新宿ラインのグリーン車でビュンと1時間！大好きな雑貨や焼き菓子が徒歩圏内にギュッと詰まった王道旅。
+
+* 10:30：鎌倉駅到着（往復グリーン車で読書＆身支度空間を確保）
+* 10:45：[鎌倉コトリ](http://www.kamakurakotori.com/) でレトロ可愛い紙もの文房具ハント
+* 11:30：たらば書房 でお洒落なセレクトの本を選ぶ
+* 12:00：[ロミ・ユニ コンフィチュール](https://www.romi-unie.jp/) でご褒美スコーン＆ジャム物色
+* 12:45：GARDEN HOUSE Kamakura で緑に囲まれて贅沢ランチ
+* 14:30：[英国アンティーク博物館 BAM鎌倉](https://www.bam-kamakura.com/) で涼しくアンティーク雑貨の世界に浸る
+* 15:30：カフェ・ディモンシュ でこだわりの珈琲とスイーツ ➔ 18:00 池袋で合流
+
+------------------------------
+## 🟨 4. 【特急1本】南房総・館山ルート 🐚海と貝と寿司
+池袋から特急「新宿さざなみ」で直行！穏やかな海を眺めながら、獲れたての貝とお寿司を堪能するプラン。（土日祝運行）
+
+* 07:50：池袋駅から特急乗車（指定席＋1,360円）➔ 09:56 館山駅到着
+* 10:30：目の前に広がる青い海を見ながら海岸散歩
+* 11:30：高台の隠れ家 すし処 と貝 で海を眺めながら絶品の貝・地魚寿司
+* 14:00：館山なぎさ食堂 のテラス席で珈琲タイム＆1階で特産品お土産ハント
+* 16:00：特急または高速バスで池袋へ（車内でメイク直し）➔ 18:00 池袋で合流
+
+------------------------------
+## 🟥 5. 【特急45分】千葉港・オーシャンビュー温泉ルート 🐚海と貝と寿司
+池袋から成田エクスプレスでビュン！平日有給に最適。超穴場のカウンター寿司と、海一望の絶景露天風呂を欲張るプラン。
+
+* 10:30：池袋駅から特急乗車（指定席＋1,290円）➔ 11:15 千葉駅到着
+* 11:30：[すし銚子丸 千葉駅前店](https://www.choushimaru.co.jp/)（ほぼ全席カウンターの穴場店。1人で活さざえやツブ貝を頼みまくる）
+* 13:00：モノレールで海沿いの「千葉みなと駅」へ
+* 13:30：幕張温泉 湯楽の里 で東京湾一望の絶景露天風呂＆綺麗なパウダールームで完璧な身支度
+* 16:30：千葉駅から特急でリラックス ➔ 18:00 池袋で合流
+
+------------------------------
+## 🟪 6. 【夏が旬！】大洗・巨大岩牡蠣＆市場寿司ルート 🐚海と貝と寿司
+特急「ひたち」で水戸へ！8月に最も旬を迎える、超大粒の「天然岩牡蠣」と「ハマグリ」を求めて茨城へ向かうガッツリグルメ旅。
+
+* 09:30：池袋から上野へ移動、特急「ひたち」乗車（指定席＋1,580円）➔ 11:00 水戸駅到着
+* 11:30：[大洗海鮮市場](https://www.oarai-kaisen.com/) 軒先で剥きたての巨大岩牡蠣や焼きハマグリを1人食べ歩き
+* 13:00：市場寿し 那珂湊店 でネタがはみ出る豪快な貝・地魚寿司
+* 14:30：大洗磯前神社 で、波が打ち付ける海の上の白い鳥居を参拝
+* 16:10：水戸駅から最新特急で快適にお色直し ➔ 18:00 池袋で合流
+
+💡 全プラン共通持ち物：室内の冷房対策に、薄手のカーディガンをバッグに入れておくと安心です。</pre>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <p>時刻・料金・運行日はプランを組んだ時点の目安です。特急の運転日や各店の営業日・定休日は、お出かけ前に公式サイトでご確認ください。</p>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var button = document.getElementById("copy");
+    var source = document.getElementById("line-text");
+    var label = button.textContent;
+    var timer;
+
+    function flash(message, state) {
+      button.textContent = message;
+      button.dataset.state = state;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        button.textContent = label;
+        delete button.dataset.state;
+      }, 2400);
+    }
+
+    function selectText() {
+      var details = source.closest("details");
+      if (details) details.open = true;
+      var range = document.createRange();
+      range.selectNodeContents(source);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    button.addEventListener("click", function () {
+      var text = source.textContent;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(
+          function () {
+            flash("コピーしました", "done");
+          },
+          function () {
+            selectText();
+            flash("選択しました。長押しでコピーしてください", "done");
+          }
+        );
+        return;
+      }
+      selectText();
+      try {
+        if (document.execCommand("copy")) {
+          flash("コピーしました", "done");
+          return;
+        }
+      } catch (error) {
+        /* fall through to the manual instruction below */
+      }
+      flash("選択しました。長押しでコピーしてください", "done");
+    });
+  })();
+</script>
+
+</body>
+</html>

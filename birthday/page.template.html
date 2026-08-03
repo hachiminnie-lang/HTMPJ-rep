@@ -1,0 +1,789 @@
+<style>
+  /* Six routes out of one hub, all converging on an 18:00 dinner: the page is
+     built like a set of rail lines. Each route keeps one colour throughout —
+     board row, station dots, timeline — so colour alone tells you where you
+     are. Everything around it stays neutral so the six can be told apart.
+     明朝 carries the personal register (title, destinations), ゴシック the
+     operational one (times, labels). No @font-face: a Japanese webfont is
+     megabytes, so the stacks below are chosen to degrade gracefully. */
+
+  :root {
+    color-scheme: light;
+    --paper: #eff1f0;
+    --surface: #fbfcfb;
+    --surface-2: #f3f5f4;
+    --ink: #141b1b;
+    --ink-2: #46514f;
+    --ink-3: #78837f;
+    --rule: #d7dbd9;
+    --accent: #0f6c63;
+    --accent-soft: #e2eeec;
+    --l1: #2f6bd6;
+    --l2: #8a5a34;
+    --l3: #1e8a5f;
+    --l4: #a97705;
+    --l5: #c23c3c;
+    --l6: #7350c4;
+    --font-body: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+      "Yu Gothic", YuGothic, "Noto Sans JP", Meiryo, system-ui, sans-serif;
+    --font-display: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP",
+      "Shippori Mincho", serif;
+    --font-num: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgb(20 27 27 / 5%), 0 14px 30px -24px rgb(20 27 27 / 55%);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --paper: #101413;
+      --surface: #171d1c;
+      --surface-2: #1d2423;
+      --ink: #e9edeb;
+      --ink-2: #a8b3b0;
+      --ink-3: #78837f;
+      --rule: #2b3331;
+      --accent: #5fd3c2;
+      --accent-soft: #17302d;
+      --l1: #85b1ff;
+      --l2: #d19a6c;
+      --l3: #5fd39f;
+      --l4: #eec052;
+      --l5: #f79089;
+      --l6: #b8a0f7;
+      --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 30px -24px rgb(0 0 0 / 80%);
+    }
+  }
+
+  /* The viewer's own toggle has to win over the OS preference both ways. */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --paper: #eff1f0;
+    --surface: #fbfcfb;
+    --surface-2: #f3f5f4;
+    --ink: #141b1b;
+    --ink-2: #46514f;
+    --ink-3: #78837f;
+    --rule: #d7dbd9;
+    --accent: #0f6c63;
+    --accent-soft: #e2eeec;
+    --l1: #2f6bd6;
+    --l2: #8a5a34;
+    --l3: #1e8a5f;
+    --l4: #a97705;
+    --l5: #c23c3c;
+    --l6: #7350c4;
+    --shadow: 0 1px 2px rgb(20 27 27 / 5%), 0 14px 30px -24px rgb(20 27 27 / 55%);
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #101413;
+    --surface: #171d1c;
+    --surface-2: #1d2423;
+    --ink: #e9edeb;
+    --ink-2: #a8b3b0;
+    --ink-3: #78837f;
+    --rule: #2b3331;
+    --accent: #5fd3c2;
+    --accent-soft: #17302d;
+    --l1: #85b1ff;
+    --l2: #d19a6c;
+    --l3: #5fd39f;
+    --l4: #eec052;
+    --l5: #f79089;
+    --l6: #b8a0f7;
+    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 30px -24px rgb(0 0 0 / 80%);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--paper);
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-text-size-adjust: 100%;
+    /* Keep 禁則処理: no small kana or closing bracket stranded at line start. */
+    line-break: strict;
+    word-break: normal;
+  }
+
+  .page {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.15rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  :is(a, button, summary):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .num {
+    font-family: var(--font-num);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── masthead ─────────────────────────────────────────────── */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+  }
+
+  .masthead h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 8.5vw, 2.9rem);
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+  }
+
+  .ribbon {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    height: 5px;
+  }
+
+  .ribbon span {
+    background: var(--c);
+    border-radius: 1px;
+  }
+
+  .standfirst {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.98rem;
+  }
+
+  /* ── section furniture ────────────────────────────────────── */
+
+  .section-h {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-h::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+
+  /* ── departure board ──────────────────────────────────────── */
+
+  .board {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    --sym: 2.35rem;
+    --sym-gap: 0.8rem;
+  }
+
+  .board-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .sym {
+    width: var(--sym);
+    height: var(--sym);
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--line);
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--line) 12%, transparent);
+    color: var(--line);
+    font-family: var(--font-num);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .row,
+  .axis {
+    display: grid;
+    grid-template-columns: var(--sym) 1fr;
+    gap: 0 var(--sym-gap);
+    align-items: start;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .axis {
+    padding-block: 0 0.1rem;
+    /* Matches the row border below, so the labels sit over the bands. */
+    border: 1px solid transparent;
+    border-block: none;
+  }
+
+  .axis-track {
+    position: relative;
+    height: 1rem;
+    font-size: 0.68rem;
+    color: var(--ink-3);
+  }
+
+  .axis-track i {
+    position: absolute;
+    top: 0;
+    font-style: normal;
+    white-space: nowrap;
+  }
+
+  .axis-track i:nth-child(1) { left: 0; }
+  .axis-track i:nth-child(2) { left: 45.45%; transform: translateX(-50%); }
+  .axis-track i:nth-child(3) { right: 0; }
+
+  .row {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 0.7rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  @media (hover: hover) {
+    .row:hover {
+      border-color: color-mix(in srgb, var(--line) 55%, var(--rule));
+      transform: translateY(-1px);
+    }
+  }
+
+  .row-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .dest {
+    font-family: var(--font-display);
+    font-size: 1.18rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .day {
+    flex: none;
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    line-height: 1.6;
+    background: var(--surface-2);
+  }
+
+  .day.is-limited {
+    color: var(--l4);
+    border-color: color-mix(in srgb, var(--l4) 45%, transparent);
+    background: color-mix(in srgb, var(--l4) 10%, transparent);
+    font-weight: 700;
+  }
+
+  .row-meta {
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  /* Each fact stays whole, and the separator rides on the end of the segment
+     before it, so a wrap never opens a line with a stray middle dot. */
+  .row-meta .seg {
+    white-space: nowrap;
+  }
+
+  .row-meta .seg:not(:last-child)::after {
+    content: "·";
+    color: var(--ink-3);
+    padding: 0 0.4rem;
+  }
+
+  /* 7:00 → 18:00. The filled part is the day; each tick is a stop; the bar at
+     the right edge is the 18:00 dinner every route shares. */
+  .band {
+    position: relative;
+    display: block;
+    height: 0.42rem;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    margin-top: 0.15rem;
+  }
+
+  .band-fill {
+    position: absolute;
+    inset: 0 0 0 auto;
+    right: 0;
+    background: color-mix(in srgb, var(--line) 30%, transparent);
+  }
+
+  .band i {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--line);
+    border-radius: 1px;
+  }
+
+  .band::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    right: -1px;
+    width: 2px;
+    background: var(--ink-3);
+  }
+
+  /* ── routes ───────────────────────────────────────────────── */
+
+  .routes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .route {
+    --sym: 2.35rem;
+    scroll-margin-top: 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--line);
+    border-radius: 0.7rem;
+    padding: 1.35rem 1.15rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .route-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .route-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .eyebrow:empty {
+    display: none;
+  }
+
+  .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+  }
+
+  .badge {
+    color: var(--line);
+    font-weight: 700;
+  }
+
+  .theme {
+    color: var(--ink-3);
+  }
+
+  .route h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.32rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+
+  .facts {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.6rem;
+    padding: 0.8rem 0;
+    border-block: 1px solid var(--rule);
+  }
+
+  .facts dt {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  /* ── timeline ─────────────────────────────────────────────── */
+
+  .timeline {
+    --time-w: 3.3rem;
+    --gutter: 1.9rem;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Starts at the first dot's centre and stops dead at the terminus dot:
+     1.2rem is that dot's offset (0.42 padding + 0.48 margin + 0.3 radius). */
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 1.2rem;
+    bottom: 1.2rem;
+    left: calc(var(--time-w) + var(--gutter) / 2 - 1px);
+    width: 2px;
+    background: color-mix(in srgb, var(--line) 38%, transparent);
+  }
+
+  .stop {
+    display: grid;
+    grid-template-columns: var(--time-w) var(--gutter) 1fr;
+    align-items: start;
+    padding: 0.42rem 0;
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  /* All three sit on one row — placed explicitly, because sparse auto-flow
+     would push the time and the text below the dot. The dot's margin lands
+     it on the centre of the first line. */
+  .stop::before {
+    content: "";
+    grid-area: 1 / 2;
+    justify-self: center;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-top: 0.44rem;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    position: relative;
+    z-index: 1;
+  }
+
+  .stop .t {
+    grid-area: 1 / 1;
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  .stop .what {
+    grid-area: 1 / 3;
+    min-width: 0;
+  }
+
+  .stop-end::before {
+    background: var(--ink);
+    border-color: var(--ink);
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0.43rem;
+  }
+
+  .stop-end {
+    margin-top: 0.2rem;
+  }
+
+  .stop-end .t,
+  .stop-end .what {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* ── closing blocks ───────────────────────────────────────── */
+
+  .note {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    padding: 1rem 1.15rem;
+    border: 1px dashed var(--rule);
+    border-radius: 0.7rem;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+
+  .note b {
+    flex: none;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .save {
+    background: var(--accent-soft);
+    border-radius: 0.7rem;
+    padding: 1.35rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .save h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .save p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+
+  #copy {
+    align-self: flex-start;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--paper);
+    background: var(--accent);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  #copy:hover {
+    opacity: 0.88;
+  }
+
+  #copy[data-state="done"] {
+    background: var(--ink);
+  }
+
+  .save details {
+    font-size: 0.85rem;
+  }
+
+  .save summary {
+    cursor: pointer;
+    color: var(--accent);
+    width: fit-content;
+  }
+
+  #line-text {
+    margin: 0.7rem 0 0;
+    max-height: 16rem;
+    overflow: auto;
+    padding: 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    line-height: 1.85;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    -webkit-user-select: all;
+    user-select: all;
+  }
+
+  .foot {
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    line-height: 1.8;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.2rem;
+  }
+
+  .foot p {
+    margin: 0;
+  }
+
+  @media (max-width: 23rem) {
+    .timeline {
+      --time-w: 2.9rem;
+      --gutter: 1.6rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    * {
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<main class="page">
+  <header class="masthead">
+    <p class="kicker">2026年8月・有給／全6ルート</p>
+    <h1>おひとり様<br />誕生日ご褒美プラン</h1>
+    <div class="ribbon" aria-hidden="true">
+      <span style="--c: var(--l1)"></span>
+      <span style="--c: var(--l2)"></span>
+      <span style="--c: var(--l3)"></span>
+      <span style="--c: var(--l4)"></span>
+      <span style="--c: var(--l5)"></span>
+      <span style="--c: var(--l6)"></span>
+    </div>
+    <p class="standfirst"><!--INTRO--></p>
+  </header>
+
+  <section class="board" aria-labelledby="board-h">
+    <h2 class="section-h" id="board-h">行き先ボード</h2>
+    <p class="hint">帯は 7:00〜18:00 の1日。色が付いた部分が動いている時間、縦の目盛りが立ち寄り先、右端の線が全ルート共通の 18:00 合流です。</p>
+    <div class="board-list">
+      <p class="axis" aria-hidden="true">
+        <span></span>
+        <span class="axis-track num"><i>7時</i><i>12時</i><i>18時</i></span>
+      </p>
+      <!--BOARD-->
+    </div>
+  </section>
+
+  <div class="routes">
+    <!--ROUTES-->
+  </div>
+
+  <aside class="note"><b>共通の持ち物</b><span><!--NOTE--></span></aside>
+
+  <section class="save" aria-labelledby="save-h">
+    <h2 class="section-h" id="save-h">LINEに保存する</h2>
+    <p>6ルートぶんの文面をそのままコピーできます。ノートや自分宛てのトークに貼り付けてお使いください。</p>
+    <button id="copy" type="button">文面をコピー</button>
+    <details>
+      <summary>貼り付ける文面を見る</summary>
+      <pre id="line-text"><!--RAW_TEXT--></pre>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <p>時刻・料金・運行日はプランを組んだ時点の目安です。特急の運転日や各店の営業日・定休日は、お出かけ前に公式サイトでご確認ください。</p>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var button = document.getElementById("copy");
+    var source = document.getElementById("line-text");
+    var label = button.textContent;
+    var timer;
+
+    function flash(message, state) {
+      button.textContent = message;
+      button.dataset.state = state;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        button.textContent = label;
+        delete button.dataset.state;
+      }, 2400);
+    }
+
+    function selectText() {
+      var details = source.closest("details");
+      if (details) details.open = true;
+      var range = document.createRange();
+      range.selectNodeContents(source);
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    button.addEventListener("click", function () {
+      var text = source.textContent;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(
+          function () {
+            flash("コピーしました", "done");
+          },
+          function () {
+            selectText();
+            flash("選択しました。長押しでコピーしてください", "done");
+          }
+        );
+        return;
+      }
+      selectText();
+      try {
+        if (document.execCommand("copy")) {
+          flash("コピーしました", "done");
+          return;
+        }
+      } catch (error) {
+        /* fall through to the manual instruction below */
+      }
+      flash("選択しました。長押しでコピーしてください", "done");
+    });
+  })();
+</script>
