@@ -1,0 +1,638 @@
+<title>熱海・初島 日帰りしおり</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap">
+
+<style>
+  :root{
+    --ground:#EEF1F1; --surface:#F8FAFA; --board:#E4EAEA;
+    --ink:#16232A; --ink-2:#4A5C64; --ink-3:#7C8B92;
+    --rule:#D3DBDA; --rule-soft:#E2E8E7;
+    --accent:#1D5A66; --accent-ink:#12414B; --accent-soft:rgba(29,90,102,.09);
+    --spark:#A9441A; --spark-soft:rgba(169,68,26,.09); --spark-rule:rgba(169,68,26,.35);
+
+    --r-ax:#B9C5C6; --r-ax-h:#657679; --r-cut:#E4EAEA;
+    --r-stay:#CFE0E2; --r-move:#DDE3E3; --r-spark-fill:#C4551F;
+    --r-lb-stay:#12414B; --r-lb-move:#4A5C64;
+    --r-pin:#8FA0A2; --r-pin-spark:#A9441A; --r-pin-t:#3E5057; --r-lg:#657679;
+
+    --f-display:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP","Songti SC",Georgia,serif;
+    --f-body:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP","Helvetica Neue",Arial,sans-serif;
+    --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+
+    --shell:min(1080px, 92vw);
+    --read:38rem;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#101A1E; --surface:#17242A; --board:#1B2A30;
+      --ink:#E6EDEC; --ink-2:#9FB0B4; --ink-3:#74868C;
+      --rule:#26353B; --rule-soft:#1E2C32;
+      --accent:#7FB9C4; --accent-ink:#A5D2DA; --accent-soft:rgba(127,185,196,.13);
+      --spark:#E58348; --spark-soft:rgba(229,131,72,.12); --spark-rule:rgba(229,131,72,.42);
+
+      --r-ax:#3A4A50; --r-ax-h:#8FA1A6; --r-cut:#1B2A30;
+      --r-stay:#22505A; --r-move:#26343A; --r-spark-fill:#D9743C;
+      --r-lb-stay:#CDE6EA; --r-lb-move:#9FB0B4;
+      --r-pin:#54666C; --r-pin-spark:#E58348; --r-pin-t:#AFC0C4; --r-lg:#8FA1A6;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#101A1E; --surface:#17242A; --board:#1B2A30;
+    --ink:#E6EDEC; --ink-2:#9FB0B4; --ink-3:#74868C;
+    --rule:#26353B; --rule-soft:#1E2C32;
+    --accent:#7FB9C4; --accent-ink:#A5D2DA; --accent-soft:rgba(127,185,196,.13);
+    --spark:#E58348; --spark-soft:rgba(229,131,72,.12); --spark-rule:rgba(229,131,72,.42);
+
+    --r-ax:#3A4A50; --r-ax-h:#8FA1A6; --r-cut:#1B2A30;
+    --r-stay:#22505A; --r-move:#26343A; --r-spark-fill:#D9743C;
+    --r-lb-stay:#CDE6EA; --r-lb-move:#9FB0B4;
+    --r-pin:#54666C; --r-pin-spark:#E58348; --r-pin-t:#AFC0C4; --r-lg:#8FA1A6;
+    color-scheme:dark;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:16px; line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,p,ul,ol,dl,dd,figure,table,blockquote{ margin:0; }
+  a{ color:var(--accent-ink); text-decoration-thickness:1px; text-underline-offset:.2em; }
+  a:hover{ color:var(--accent); }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .shell{ width:var(--shell); margin-inline:auto; }
+  .stack{ display:flex; flex-direction:column; gap:1.15rem; }
+
+  /* ---------- masthead ---------- */
+  .masthead{ padding:clamp(2.75rem,8vw,5.5rem) 0 clamp(1.25rem,3vw,2rem); }
+  .eyebrow{
+    font-size:.76rem; letter-spacing:.18em; font-weight:600;
+    color:var(--accent); font-family:var(--f-mono);
+  }
+  h1{
+    font-family:var(--f-display); font-weight:500;
+    font-size:clamp(2.7rem,8vw,4.6rem); line-height:1.1; letter-spacing:.06em;
+    text-wrap:balance;
+  }
+  .lede{ max-width:var(--read); color:var(--ink-2); font-size:1.05rem; }
+  .facts{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+    gap:0 2rem; margin-top:.75rem;
+  }
+  .fact{ padding:.85rem 0; border-top:1px solid var(--rule); }
+  .fact dt{ font-size:.72rem; letter-spacing:.12em; color:var(--ink-3); line-height:1.6; }
+  .fact dd{ font-family:var(--f-display); font-size:1.12rem; line-height:1.5; }
+  .fact dd small{ font-size:.8em; color:var(--ink-2); }
+
+  /* ---------- route figure ---------- */
+  .routefig{ padding:clamp(1rem,3vw,2rem) 0 clamp(2rem,5vw,3rem); }
+  .board{
+    background:var(--board); border:1px solid var(--rule);
+    padding:clamp(.9rem,2.5vw,1.5rem); overflow-x:auto;
+  }
+  .board svg{ display:block; width:100%; min-width:940px; height:auto; font-family:var(--f-body); }
+  .board svg .ax{ stroke:var(--r-ax); stroke-width:1; }
+  .board svg .ax-h{ fill:var(--r-ax-h); font-size:12.5px; }
+  .board svg .seg{ stroke:var(--r-cut); stroke-width:1; }
+  .board svg .seg-stay{ fill:var(--r-stay); }
+  .board svg .seg-move{ fill:var(--r-move); }
+  .board svg .seg-spark{ fill:var(--r-spark-fill); }
+  .board svg .lb-stay{ fill:var(--r-lb-stay); font-size:15px; }
+  .board svg .lb-move{ fill:var(--r-lb-move); font-size:12.5px; }
+  .board svg .pin{ stroke:var(--r-pin); stroke-width:1; }
+  .board svg .pin-spark{ stroke:var(--r-pin-spark); stroke-width:1.5; }
+  .board svg .pin-t{ fill:var(--r-pin-t); font-size:13px; }
+  .board svg .pin-t-spark{ fill:var(--r-pin-spark); font-size:13px; font-weight:700; }
+  .board svg .lg{ fill:var(--r-lg); font-size:12.5px; }
+  figcaption{ margin-top:.85rem; max-width:var(--read); color:var(--ink-2); font-size:.9rem; }
+
+  /* ---------- sections ---------- */
+  main{ display:flex; flex-direction:column; gap:clamp(2.5rem,6vw,4.25rem); padding-bottom:clamp(2.5rem,6vw,4rem); }
+  .sechead{ display:flex; flex-direction:column; gap:.5rem; margin-bottom:1.35rem; }
+  h2{
+    font-family:var(--f-display); font-weight:500;
+    font-size:clamp(1.5rem,3.6vw,2.05rem); line-height:1.35; letter-spacing:.04em;
+    text-wrap:balance;
+  }
+  .sectext{ max-width:var(--read); color:var(--ink-2); font-size:.98rem; }
+  .sectext + .sectext{ margin-top:.8rem; }
+
+  /* ---------- reasons ---------- */
+  .reasons{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(238px,1fr));
+    gap:1px; background:var(--rule); border:1px solid var(--rule);
+  }
+  .reason{ background:var(--surface); padding:1.2rem 1.25rem 1.4rem; display:flex; flex-direction:column; gap:.5rem; }
+  .reason .tag{ font-family:var(--f-mono); font-size:.7rem; letter-spacing:.14em; color:var(--accent); }
+  .reason h3{ font-family:var(--f-display); font-weight:500; font-size:1.12rem; line-height:1.5; }
+  .reason p{ font-size:.92rem; color:var(--ink-2); line-height:1.8; }
+
+  /* ---------- caution ---------- */
+  .caution{
+    margin-top:1.35rem; border:1px solid var(--spark-rule); background:var(--spark-soft);
+    padding:1rem 1.15rem; display:flex; flex-direction:column; gap:.35rem; max-width:46rem;
+  }
+  .caution .tag{ font-family:var(--f-mono); font-size:.7rem; letter-spacing:.14em; color:var(--spark); }
+  .caution p{ font-size:.94rem; color:var(--ink-2); }
+
+  /* ---------- timeline ---------- */
+  .tl{ list-style:none; padding:0; }
+  .tl li{
+    display:grid; grid-template-columns:5rem 1fr; gap:0 1.1rem;
+    padding:.95rem 0; border-top:1px solid var(--rule-soft);
+  }
+  .tl li:first-child{ border-top:1px solid var(--rule); }
+  .tl li:last-child{ border-bottom:1px solid var(--rule); }
+  .tl-time{
+    font-family:var(--f-mono); font-variant-numeric:tabular-nums;
+    font-size:.92rem; color:var(--accent-ink); padding-top:.2rem; letter-spacing:.02em;
+  }
+  .tl h3{ font-size:1rem; font-weight:600; line-height:1.6; }
+  .tl p{ margin-top:.25rem; font-size:.92rem; color:var(--ink-2); max-width:34rem; }
+  .tl .is-spark .tl-time,
+  .tl .is-spark h3{ color:var(--spark); }
+
+  /* ---------- tables ---------- */
+  .tablewrap{ overflow-x:auto; }
+  table{ border-collapse:collapse; width:100%; min-width:430px; font-size:.94rem; }
+  th,td{ padding:.68rem .8rem; border-bottom:1px solid var(--rule-soft); text-align:left; vertical-align:baseline; }
+  th:first-child,td:first-child{ padding-left:0; }
+  th:last-child,td:last-child{ padding-right:0; }
+  thead th{
+    font-size:.72rem; letter-spacing:.11em; font-weight:600;
+    color:var(--ink-3); border-bottom:1px solid var(--rule);
+  }
+  .num{ text-align:right; font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:.89rem; }
+  tfoot td{ border-top:1px solid var(--rule); border-bottom:none; font-weight:700; padding-top:.8rem; }
+  .tnote{ margin-top:.9rem; font-size:.88rem; color:var(--ink-3); max-width:44rem; }
+
+  /* ---------- two-column blocks ---------- */
+  .cols{ display:grid; grid-template-columns:repeat(auto-fit,minmax(272px,1fr)); gap:1.75rem 2.5rem; }
+  .colh{
+    font-size:.74rem; letter-spacing:.13em; font-weight:600; color:var(--ink-3);
+    padding-bottom:.5rem; border-bottom:1px solid var(--rule); margin-bottom:.85rem;
+  }
+
+  /* ---------- checklist ---------- */
+  .checks{ list-style:none; padding:0; display:grid; gap:.5rem; }
+  .checks li{ display:flex; gap:.65rem; align-items:flex-start; }
+  .checks input{ flex:none; width:1rem; height:1rem; margin:.36rem 0 0; accent-color:var(--accent); }
+  .checks label{ font-size:.93rem; color:var(--ink-2); cursor:pointer; line-height:1.75; }
+  .checks input:checked + label{ color:var(--ink-3); text-decoration:line-through; }
+
+  .bullets{ padding-left:1.15em; display:grid; gap:.42rem; font-size:.92rem; color:var(--ink-2); }
+  .bullets li::marker{ color:var(--ink-3); }
+
+  .srcs{ list-style:none; padding:0; display:grid; gap:.45rem; font-size:.89rem; }
+  .srcs span{ color:var(--ink-3); }
+
+  footer{ border-top:1px solid var(--rule); padding:1.75rem 0 3rem; color:var(--ink-3); font-size:.85rem; }
+  footer p{ max-width:44rem; }
+  footer p + p{ margin-top:.5rem; }
+</style>
+
+<header class="masthead shell">
+  <div class="stack">
+    <p class="eyebrow">東京発・日帰り ／ 2026.09.13 SUN</p>
+    <h1>熱海・初島</h1>
+    <p class="lede">
+      高速船で30分の島をひと回りして、熱海に戻って湯に浸かり、そのまま露天風呂から海上花火を見る。
+      9月の土日でこの三つが一日に重なるのは、13日だけです。
+    </p>
+    <dl class="facts">
+      <div class="fact"><dt>日付</dt><dd>9月13日<small>（日）</small></dd></div>
+      <div class="fact"><dt>移動</dt><dd>JR＋高速船＋バス</dd></div>
+      <div class="fact"><dt>歩く距離</dt><dd>約6<small>km</small></dd></div>
+      <div class="fact"><dt>予算の目安</dt><dd>2人で約38,700<small>円</small></dd></div>
+    </dl>
+  </div>
+</header>
+
+<figure class="routefig shell">
+  <div class="board">
+    <svg xmlns="http://www.w3.org/2000/svg" id="route" viewBox="0 0 1240 195" role="img" aria-labelledby="routeTitle routeDesc">
+  <title id="routeTitle">2026年9月13日 熱海・初島 日帰りの一日の骨格</title>
+  <desc id="routeDesc">午前8時から午後10時30分までの時間帯に、東京から熱海への移動、熱海の朝、高速船、初島での滞在、高速船、オーシャンスパFuuaでの温泉とサウナと夕食、20時20分からの海上花火、駅への移動、帰路が並ぶ帯グラフ。動かせない時刻として、熱海港10時40分発の船、初島15時20分発の船、20時20分の花火打ち上げ、Fuua発22時20分の最終シャトルが示されている。</desc>
+
+  <!-- 時刻軸 8:00 – 22:30 / 1時間 = 78px -->
+  <g class="ax-h" text-anchor="middle">
+    <text x="70" y="22">8</text>
+    <text x="226" y="22">10</text>
+    <text x="382" y="22">12</text>
+    <text x="538" y="22">14</text>
+    <text x="694" y="22">16</text>
+    <text x="850" y="22">18</text>
+    <text x="1006" y="22">20</text>
+    <text x="1162" y="22">22</text>
+  </g>
+  <g class="ax">
+    <line x1="70" y1="30" x2="70" y2="40"/>
+    <line x1="148" y1="34" x2="148" y2="40"/>
+    <line x1="226" y1="30" x2="226" y2="40"/>
+    <line x1="304" y1="34" x2="304" y2="40"/>
+    <line x1="382" y1="30" x2="382" y2="40"/>
+    <line x1="460" y1="34" x2="460" y2="40"/>
+    <line x1="538" y1="30" x2="538" y2="40"/>
+    <line x1="616" y1="34" x2="616" y2="40"/>
+    <line x1="694" y1="30" x2="694" y2="40"/>
+    <line x1="772" y1="34" x2="772" y2="40"/>
+    <line x1="850" y1="30" x2="850" y2="40"/>
+    <line x1="928" y1="34" x2="928" y2="40"/>
+    <line x1="1006" y1="30" x2="1006" y2="40"/>
+    <line x1="1084" y1="34" x2="1084" y2="40"/>
+    <line x1="1162" y1="30" x2="1162" y2="40"/>
+  </g>
+
+  <!-- 一日の帯 -->
+  <g class="seg">
+    <rect class="seg-move"  x="70"   y="48" width="78"  height="44" rx="2"/>
+    <rect class="seg-stay"  x="148"  y="48" width="130" height="44" rx="2"/>
+    <rect class="seg-move"  x="278"  y="48" width="39"  height="44" rx="2"/>
+    <rect class="seg-stay"  x="317"  y="48" width="325" height="44" rx="2"/>
+    <rect class="seg-move"  x="642"  y="48" width="39"  height="44" rx="2"/>
+    <rect class="seg-move"  x="681"  y="48" width="33"  height="44" rx="2"/>
+    <rect class="seg-stay"  x="714"  y="48" width="318" height="44" rx="2"/>
+    <rect class="seg-spark" x="1032" y="48" width="26"  height="44" rx="2"/>
+    <rect class="seg-move"  x="1058" y="48" width="78"  height="44" rx="2"/>
+    <rect class="seg-move"  x="1136" y="48" width="65"  height="44" rx="2"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="lb-move"  x="109"  y="75">新幹線</text>
+    <text class="lb-stay"  x="213"  y="75">熱海の朝</text>
+    <text class="lb-move"  x="297"  y="75">船</text>
+    <text class="lb-stay"  x="479"  y="75">初島 ｜ 島を一周して海鮮</text>
+    <text class="lb-move"  x="661"  y="75">船</text>
+    <text class="lb-stay"  x="873"  y="75">Fuua ｜ 温泉・サウナ・夕食</text>
+    <text class="lb-move"  x="1097" y="75">駅へ</text>
+    <text class="lb-move"  x="1168" y="75">帰路</text>
+  </g>
+
+  <!-- 動かせない4つの時刻 -->
+  <g>
+    <line class="pin" x1="278" y1="92" x2="278" y2="106"/>
+    <line class="pin" x1="642" y1="92" x2="642" y2="106"/>
+    <line class="pin-spark" x1="1032" y1="92" x2="1032" y2="106"/>
+    <line class="pin" x1="1188" y1="92" x2="1188" y2="128"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="pin-t" x="278" y="122">10:40 熱海港発の船</text>
+    <text class="pin-t" x="642" y="122">15:20 初島発（次は16:40）</text>
+    <text class="pin-t-spark" x="1032" y="122">20:20 花火・20分間</text>
+  </g>
+  <text class="pin-t" x="1188" y="144" text-anchor="end">22:20 Fuua発 最終シャトル</text>
+
+  <!-- 凡例 -->
+  <g>
+    <rect class="seg seg-stay"  x="70"  y="166" width="13" height="10" rx="2"/>
+    <text class="lg" x="89"  y="175">滞在</text>
+    <rect class="seg seg-move"  x="140" y="166" width="13" height="10" rx="2"/>
+    <text class="lg" x="159" y="175">移動</text>
+    <rect class="seg seg-spark" x="210" y="166" width="13" height="10" rx="2"/>
+    <text class="lg" x="229" y="175">花火</text>
+  </g>
+</svg>
+  </div>
+  <figcaption>
+    一日の形は、動かせない四つの時刻で決まります。行きの船（10:40）、帰りの船（15:20）、花火（20:20）、
+    そして Fuua を出る最終シャトル（22:20）。この四つの間に、島の四時間と湯の四時間がちょうど収まります。
+  </figcaption>
+</figure>
+
+<main class="shell">
+
+  <section>
+    <div class="sechead">
+      <h2>なぜ、この日なのか</h2>
+      <p class="sectext">別の土日でも初島と温泉は成立します。13日を選ぶ理由は、夜の締めくくりが変わることです。</p>
+    </div>
+    <div class="reasons">
+      <div class="reason">
+        <p class="tag">FIREWORKS</p>
+        <h3>9月の花火は、この日だけ</h3>
+        <p>2026年度の秋季熱海海上花火大会は 9/13・10/12・10/25・11/8・11/23 の5回。9月に当たるのは13日だけで、打ち上げは20:20から20分間です。</p>
+      </div>
+      <div class="reason">
+        <p class="tag">ONSEN</p>
+        <h3>湯に浸かったまま見られる</h3>
+        <p>オーシャンスパ Fuua のかけ流し露天湯は、花火の会場が正面。上がって観覧席（利用者は1,100円・水1本付き）に移ることもできます。</p>
+      </div>
+      <div class="reason">
+        <p class="tag">ISLAND</p>
+        <h3>島は午前に渡っておく</h3>
+        <p>熱海港10:40の便で渡り、初島15:20の便で戻れば、Fuua の受付（21:00まで）にも花火にも余裕で間に合います。</p>
+      </div>
+    </div>
+    <div class="caution">
+      <p class="tag">花火の日の注意</p>
+      <p>
+        花火開催日は Fuua の「アフター5」（17時以降入館 2,310円）が販売されず、基本料金のみになります。
+        夕方から入っても割引は効かないので、時間を惜しまず16時台から入ってしまうほうが得です。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>当日の流れ</h2>
+      <p class="sectext">時刻は目安です。船・花火・シャトルの三つだけは実際の時刻、列車は要確認。</p>
+    </div>
+    <ol class="tl">
+      <li>
+        <span class="tl-time">08:00</span>
+        <div>
+          <h3>東京駅 発</h3>
+          <p>こだま自由席で約50分・3,740円。東京駅から乗れば座れます。列車の時刻だけは出発前に確定させてください。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">09:00</span>
+        <div>
+          <h3>熱海駅 着</h3>
+          <p>買い出しと朝ごはんは午前のうちに。仲見世商店街は駅の目の前です。花火の日は昼過ぎから駅前が混みはじめます。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">10:00</span>
+        <div>
+          <h3>熱海駅 → 熱海港</h3>
+          <p>駅前ロータリーから「熱海港・後楽園」ゆきの路線バスで約10分、230円。出航の20〜30分前に着く便で。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">10:40</span>
+        <div>
+          <h3>高速船で初島へ</h3>
+          <p>往復2,800円、予約不要、所要30分。波が高いと欠航するので、当日の朝に運航状況だけ見ておきます。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">11:10</span>
+        <div>
+          <h3>初島 着 ─ 港の食堂街で昼</h3>
+          <p>船を降りてすぐが食堂街。島の漁師が毎日獲ってくる伊勢海老やサザエ、海鮮丼が並びます。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">12:30</span>
+        <div>
+          <h3>島を一周する</h3>
+          <p>周囲4kmの遊歩道を、ゆっくり1〜2時間。初島灯台は外側に螺旋階段がついた日本で唯一の登れる灯台で、晴れていれば伊豆七島まで見えます。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">14:30</span>
+        <div>
+          <h3>港へ戻る</h3>
+          <p>売店でひと休み。次の便は16:40と17:50なので、乗り遅れても詰みではありません。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">15:20</span>
+        <div>
+          <h3>高速船 初島発</h3>
+          <p>甲板は風が強い。羽織るものを一枚。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">15:50</span>
+        <div>
+          <h3>熱海港 着 → Fuua へ</h3>
+          <p>同じ路線バスで終点の熱海後楽園まで。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">16:15</span>
+        <div>
+          <h3>オーシャンスパ Fuua</h3>
+          <p>3,080円＋入湯税150円。館内着とタオルは料金に含まれます。全長25mの露天立ち湯、展望サウナ、岩盤浴。ここに四時間います。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">19:00</span>
+        <div>
+          <h3>館内で夕食</h3>
+          <p>この時間に外へ出ると花火前の人波に当たります。館内で済ませたほうが楽です。</p>
+        </div>
+      </li>
+      <li class="is-spark">
+        <span class="tl-time">20:20</span>
+        <div>
+          <h3>熱海海上花火大会</h3>
+          <p>20分間。かけ流し露天湯からそのまま、あるいは観覧席（1,100円）で。山に囲まれた湾に音が反響します。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">21:00</span>
+        <div>
+          <h3>Fuua → 熱海駅</h3>
+          <p>無料シャトルで約10分。Fuua 発は22:20が最終なので、慌てて出る必要はありません。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-time">21:40</span>
+        <div>
+          <h3>熱海駅 発 → 東京</h3>
+          <p>帰りの列車だけは、出発前に押さえておくこと。ここだけは当日の勘に任せないでください。</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>お金の目安</h2>
+      <p class="sectext">2人分。入場料・運賃は確認できた金額、食事は相場の見込みです。</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th scope="col">項目</th><th scope="col" class="num">単価</th><th scope="col" class="num">2人分</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>新幹線 東京⇄熱海（こだま自由席）</td><td class="num">3,740 × 2</td><td class="num">14,960</td></tr>
+          <tr><td>路線バス 熱海駅 → 熱海港</td><td class="num">230</td><td class="num">460</td></tr>
+          <tr><td>初島 往復乗船券</td><td class="num">2,800</td><td class="num">5,600</td></tr>
+          <tr><td>初島の昼食（海鮮）</td><td class="num">2,500 前後</td><td class="num">5,000</td></tr>
+          <tr><td>Fuua 入館＋入湯税</td><td class="num">3,230</td><td class="num">6,460</td></tr>
+          <tr><td>Fuua 館内での夕食</td><td class="num">2,000 前後</td><td class="num">4,000</td></tr>
+          <tr><td>花火観覧席（任意）</td><td class="num">1,100</td><td class="num">2,200</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>合計</td><td class="num">1人 約19,300</td><td class="num">約38,700</td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <p class="tnote">
+      帰りは Fuua の無料シャトルなので、バス代は行きの片道だけです。
+      新幹線をやめて東海道線の普通列車にすると片道1時間50分ほどかかりますが、2人で7,000円前後は浮きます（普通運賃は要確認）。
+    </p>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>出発前と、当日の持ちもの</h2>
+      <p class="sectext">チェックはこの端末に保存されます。</p>
+    </div>
+    <div class="cols">
+      <div>
+        <p class="colh">出発前に確かめる</p>
+        <ul class="checks">
+          <li><input type="checkbox" id="c1"><label for="c1">9月13日の花火開催を熱海市の公式ページで最終確認する（荒天時は順延）</label></li>
+          <li><input type="checkbox" id="c2"><label for="c2">往復の列車時刻を確定する。とくに帰りの熱海発</label></li>
+          <li><input type="checkbox" id="c3"><label for="c3">当日の朝、高速船の運航状況を確認する</label></li>
+          <li><input type="checkbox" id="c4"><label for="c4">花火開催日の Fuua の営業時間と、観覧席の買い方を確認する</label></li>
+          <li><input type="checkbox" id="c5"><label for="c5">初島の食堂街の営業日を確認する</label></li>
+        </ul>
+      </div>
+      <div>
+        <p class="colh">持っていく</p>
+        <ul class="checks">
+          <li><input type="checkbox" id="p1"><label for="p1">歩ける靴 ─ 遊歩道は舗装されているが起伏がある</label></li>
+          <li><input type="checkbox" id="p2"><label for="p2">帽子・日焼け止め・飲みもの ─ 9月の島は日陰が少ない</label></li>
+          <li><input type="checkbox" id="p3"><label for="p3">羽織るもの ─ 船の甲板と、夜の海風</label></li>
+          <li><input type="checkbox" id="p4"><label for="p4">現金 ─ 島の小さな店は現金のみのことがある</label></li>
+          <li><input type="checkbox" id="p5"><label for="p5">モバイルバッテリー</label></li>
+          <li><input type="checkbox" id="p6"><label for="p6">髪をまとめるもの、湯上がりのスキンケア</label></li>
+        </ul>
+        <p class="tnote">タオルと館内着は Fuua の入館料に含まれます。持っていかなくて大丈夫です。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>船が止まったら、雨なら</h2>
+      <p class="sectext">
+        高速船は波が高いと欠航します。9月は台風もある。島に渡れなくても、熱海側だけで同じ骨格の一日が組めます。
+        夕方以降は本編とまったく同じで、Fuua と花火は動きません。
+      </p>
+    </div>
+    <div class="cols">
+      <div>
+        <p class="colh">午前 ─ 來宮神社</p>
+        <ul class="bullets">
+          <li>来宮駅から徒歩5分。熱海駅の隣です</li>
+          <li>樹齢2,100年、幹回り24mの大楠。国の天然記念物</li>
+          <li>幹を一回りすると寿命が一年延びる、と言われています</li>
+          <li>日没から23時まで、森にオレンジの灯りがともります</li>
+        </ul>
+      </div>
+      <div>
+        <p class="colh">午後 ─ アタミロープウェイ</p>
+        <ul class="bullets">
+          <li>9:30〜17:00。3分で八幡山の山頂へ</li>
+          <li>あいじょう岬展望台から、房総半島・三浦・初島・伊豆大島まで</li>
+          <li>チケットを見せると Fuua の入館料が割引になります</li>
+          <li>山麓駅は熱海後楽園のすぐ前。そのまま Fuua へ入れます</li>
+        </ul>
+      </div>
+    </div>
+    <p class="tnote">
+      雨脚が強い日は展望台を諦めて、來宮神社と商店街だけにして、Fuua に長くいる。
+      花火は多少の雨なら決行されますが、荒天なら順延です。
+    </p>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>花火のない土日に行くなら</h2>
+      <p class="sectext">
+        9月の土日で花火があるのは13日だけです。5・6・12・19・20・26・27日に行くなら、組み替えたほうが一日は気持ちよくなります。
+      </p>
+    </div>
+    <ul class="bullets">
+      <li>島に長くいられます。初島発の最終は17:50。海岸線ぎりぎりの露天風呂「島の湯」にも入れます</li>
+      <li>Fuua は17時以降入館の「アフター5」2,310円が使えます（花火の日は販売されません）</li>
+      <li>19時台の列車で帰れるので、翌日が月曜でも無理がありません</li>
+      <li>ただし9月19〜21日は3連休です。船もFuuaも混雑は上がります</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>どこまで裏を取って、どこからが要確認か</h2>
+      <p class="sectext">
+        料金と時刻は変わります。確かめられたことと、このページでは確定できなかったことを分けておきます。
+      </p>
+    </div>
+    <div class="cols">
+      <div>
+        <p class="colh">確認できたこと</p>
+        <ul class="bullets">
+          <li>2026年度の秋季熱海海上花火大会は 9/13・10/12・10/25・11/8・11/23。20:20〜20:40</li>
+          <li>Fuua は通常料金 大人3,080円、アフター5（17時以降）2,310円、別途入湯税150円。館内着・タオル込み、受付9:00〜21:00</li>
+          <li>花火開催日はアフター5・アフター8の販売がなく基本料金のみ。利用者は観覧席を1,100円で購入できる</li>
+          <li>Fuua のかけ流し露天湯から花火が見える</li>
+          <li>熱海駅⇄Fuua の無料シャトルは、熱海駅発 9:40〜19:00／Fuua発 8:30〜22:20、約10分</li>
+          <li>路線バス（熱海−熱海港・後楽園）は230円、約12分</li>
+          <li>高速船は熱海港発 7:30・8:40・10:40・12:00・14:00・16:00・17:20／初島港発 8:00・9:20・11:20・13:20・15:20・16:40・17:50。所要30分、往復2,800円、予約不要</li>
+          <li>初島は周囲4km、遊歩道の一周に1〜2時間。登れる初島灯台、島の湯、港の食堂街</li>
+          <li>アタミロープウェイは9:30〜17:00</li>
+          <li>來宮神社は来宮駅から徒歩5分。大楠は樹齢2,100年・幹回り24m、日没〜23時ライトアップ</li>
+          <li>東京〜熱海はこだまで約50分、自由席3,740円</li>
+        </ul>
+      </div>
+      <div>
+        <p class="colh">確認できていないこと</p>
+        <ul class="bullets">
+          <li>当日の具体的な列車時刻。とくに帰りの熱海発の最終</li>
+          <li>9月13日という日付の最終確定と、荒天時の順延の扱い</li>
+          <li>花火開催日の Fuua の営業終了時刻と、観覧席の販売方法（当日窓口か事前か）</li>
+          <li>高速船の当日運航と、時刻の季節変動。就航する船によって変わります</li>
+          <li>アタミロープウェイの往復料金。700円と900円の両方の記載を見ました</li>
+          <li>熱海港から熱海後楽園までの実際の所要時間</li>
+          <li>初島の各店の営業日と価格</li>
+          <li>東海道線の普通運賃</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>出典</h2>
+    </div>
+    <ul class="srcs">
+      <li><a href="https://www.city.atami.lg.jp/event/1009037/1014753.html">熱海海上花火大会日程について</a> <span>熱海市公式ウェブサイト</span></li>
+      <li><a href="https://www.ataminews.gr.jp/event/8/">熱海海上花火大会</a> <span>あたみニュース（熱海市観光サイト）</span></li>
+      <li><a href="https://www.atamibayresort.com/cms/storage/3/b22fbe8636e884e0d450868d9552fb2b.html">花火大会開催日の料金形態について</a> <span>オーシャンスパ Fuua 公式</span></li>
+      <li><a href="https://www.atamibayresort.com/images/access/map-shuttle.pdf">熱海駅送迎シャトルバスのご案内</a> <span>ATAMI BAY RESORT KORAKUEN</span></li>
+      <li><a href="https://www.hatsushima.jp/access/">初島定期船 時刻表・アクセス</a> <span>初島リゾートライン</span></li>
+      <li><a href="http://hatsushima.or.jp/play/walk.html">島内散策</a> <span>初島区事業協同組合</span></li>
+      <li><a href="https://www.atami-ropeway.jp/">アタミロープウェイ</a> <span>あいじょう岬展望台</span></li>
+      <li><a href="https://kinomiya.or.jp/">熱海 來宮神社</a> <span>公式</span></li>
+      <li><a href="https://www.ataminews.gr.jp/spot/175">路線バス</a> <span>あたみニュース</span></li>
+      <li><a href="https://ekitan.com/transit/shinkansen/section/sf-2590/st-1506/kodama">東京駅から熱海駅までの新幹線（こだま）</a> <span>駅探</span></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="shell">
+  <p>2026年8月27日 作成。公開情報をもとに組んだ非公式の行程案です。</p>
+  <p>料金・時刻・営業日は変わります。出発前に、それぞれの公式サイトで確認してください。</p>
+</footer>
+
+<script>
+  (function () {
+    var KEY = 'atami-hatsushima-checks-v1';
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.checks input[type="checkbox"]'));
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+
+    boxes.forEach(function (box) {
+      if (saved[box.id]) box.checked = true;
+      box.addEventListener('change', function () {
+        var state = {};
+        boxes.forEach(function (b) { if (b.checked) state[b.id] = 1; });
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* 保存できなくても動く */ }
+      });
+    });
+  })();
+</script>

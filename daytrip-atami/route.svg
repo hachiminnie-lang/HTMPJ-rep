@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="route" viewBox="0 0 1240 195" width="1240" height="195" role="img" aria-labelledby="routeTitle routeDesc">
+  <title id="routeTitle">2026年9月13日 熱海・初島 日帰りの一日の骨格</title>
+  <desc id="routeDesc">午前8時から午後10時30分までの時間帯に、東京から熱海への移動、熱海の朝、高速船、初島での滞在、高速船、オーシャンスパFuuaでの温泉とサウナと夕食、20時20分からの海上花火、駅への移動、帰路が並ぶ帯グラフ。動かせない時刻として、熱海港10時40分発の船、初島15時20分発の船、20時20分の花火打ち上げ、Fuua発22時20分の最終シャトルが示されている。</desc>
+
+  <style id="route-standalone-theme">
+    #route{ background:#EEF1F1; font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP","Helvetica Neue",Arial,sans-serif; }
+    #route .ax{ stroke:#B9C5C6; stroke-width:1; }
+    #route .ax-h{ fill:#657679; font-size:12.5px; }
+    #route .seg{ stroke:#EEF1F1; stroke-width:1; }
+    #route .seg-stay{ fill:#CFE0E2; }
+    #route .seg-move{ fill:#DDE3E3; }
+    #route .seg-spark{ fill:#C4551F; }
+    #route .lb-stay{ fill:#12414B; font-size:15px; }
+    #route .lb-move{ fill:#4A5C64; font-size:12.5px; }
+    #route .pin{ stroke:#8FA0A2; stroke-width:1; }
+    #route .pin-spark{ stroke:#A9441A; stroke-width:1.5; }
+    #route .pin-t{ fill:#3E5057; font-size:13px; }
+    #route .pin-t-spark{ fill:#A9441A; font-size:13px; font-weight:700; }
+    #route .lg{ fill:#657679; font-size:12.5px; }
+    @media (prefers-color-scheme: dark){
+      #route{ background:#101A1E; }
+      #route .ax{ stroke:#3A4A50; }
+      #route .ax-h{ fill:#8FA1A6; }
+      #route .seg{ stroke:#101A1E; }
+      #route .seg-stay{ fill:#22505A; }
+      #route .seg-move{ fill:#26343A; }
+      #route .seg-spark{ fill:#D9743C; }
+      #route .lb-stay{ fill:#CDE6EA; }
+      #route .lb-move{ fill:#9FB0B4; }
+      #route .pin{ stroke:#54666C; }
+      #route .pin-spark{ stroke:#E58348; }
+      #route .pin-t{ fill:#AFC0C4; }
+      #route .pin-t-spark{ fill:#E58348; }
+      #route .lg{ fill:#8FA1A6; }
+    }
+  </style>
+
+  <!-- 時刻軸 8:00 – 22:30 / 1時間 = 78px -->
+  <g class="ax-h" text-anchor="middle">
+    <text x="70" y="22">8</text>
+    <text x="226" y="22">10</text>
+    <text x="382" y="22">12</text>
+    <text x="538" y="22">14</text>
+    <text x="694" y="22">16</text>
+    <text x="850" y="22">18</text>
+    <text x="1006" y="22">20</text>
+    <text x="1162" y="22">22</text>
+  </g>
+  <g class="ax">
+    <line x1="70" y1="30" x2="70" y2="40"/>
+    <line x1="148" y1="34" x2="148" y2="40"/>
+    <line x1="226" y1="30" x2="226" y2="40"/>
+    <line x1="304" y1="34" x2="304" y2="40"/>
+    <line x1="382" y1="30" x2="382" y2="40"/>
+    <line x1="460" y1="34" x2="460" y2="40"/>
+    <line x1="538" y1="30" x2="538" y2="40"/>
+    <line x1="616" y1="34" x2="616" y2="40"/>
+    <line x1="694" y1="30" x2="694" y2="40"/>
+    <line x1="772" y1="34" x2="772" y2="40"/>
+    <line x1="850" y1="30" x2="850" y2="40"/>
+    <line x1="928" y1="34" x2="928" y2="40"/>
+    <line x1="1006" y1="30" x2="1006" y2="40"/>
+    <line x1="1084" y1="34" x2="1084" y2="40"/>
+    <line x1="1162" y1="30" x2="1162" y2="40"/>
+  </g>
+
+  <!-- 一日の帯 -->
+  <g class="seg">
+    <rect class="seg-move"  x="70"   y="48" width="78"  height="44" rx="2"/>
+    <rect class="seg-stay"  x="148"  y="48" width="130" height="44" rx="2"/>
+    <rect class="seg-move"  x="278"  y="48" width="39"  height="44" rx="2"/>
+    <rect class="seg-stay"  x="317"  y="48" width="325" height="44" rx="2"/>
+    <rect class="seg-move"  x="642"  y="48" width="39"  height="44" rx="2"/>
+    <rect class="seg-move"  x="681"  y="48" width="33"  height="44" rx="2"/>
+    <rect class="seg-stay"  x="714"  y="48" width="318" height="44" rx="2"/>
+    <rect class="seg-spark" x="1032" y="48" width="26"  height="44" rx="2"/>
+    <rect class="seg-move"  x="1058" y="48" width="78"  height="44" rx="2"/>
+    <rect class="seg-move"  x="1136" y="48" width="65"  height="44" rx="2"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="lb-move"  x="109"  y="75">新幹線</text>
+    <text class="lb-stay"  x="213"  y="75">熱海の朝</text>
+    <text class="lb-move"  x="297"  y="75">船</text>
+    <text class="lb-stay"  x="479"  y="75">初島 ｜ 島を一周して海鮮</text>
+    <text class="lb-move"  x="661"  y="75">船</text>
+    <text class="lb-stay"  x="873"  y="75">Fuua ｜ 温泉・サウナ・夕食</text>
+    <text class="lb-move"  x="1097" y="75">駅へ</text>
+    <text class="lb-move"  x="1168" y="75">帰路</text>
+  </g>
+
+  <!-- 動かせない4つの時刻 -->
+  <g>
+    <line class="pin" x1="278" y1="92" x2="278" y2="106"/>
+    <line class="pin" x1="642" y1="92" x2="642" y2="106"/>
+    <line class="pin-spark" x1="1032" y1="92" x2="1032" y2="106"/>
+    <line class="pin" x1="1188" y1="92" x2="1188" y2="128"/>
+  </g>
+  <g text-anchor="middle">
+    <text class="pin-t" x="278" y="122">10:40 熱海港発の船</text>
+    <text class="pin-t" x="642" y="122">15:20 初島発（次は16:40）</text>
+    <text class="pin-t-spark" x="1032" y="122">20:20 花火・20分間</text>
+  </g>
+  <text class="pin-t" x="1188" y="144" text-anchor="end">22:20 Fuua発 最終シャトル</text>
+
+  <!-- 凡例 -->
+  <g>
+    <rect class="seg seg-stay"  x="70"  y="166" width="13" height="10" rx="2"/>
+    <text class="lg" x="89"  y="175">滞在</text>
+    <rect class="seg seg-move"  x="140" y="166" width="13" height="10" rx="2"/>
+    <text class="lg" x="159" y="175">移動</text>
+    <rect class="seg seg-spark" x="210" y="166" width="13" height="10" rx="2"/>
+    <text class="lg" x="229" y="175">花火</text>
+  </g>
+</svg>

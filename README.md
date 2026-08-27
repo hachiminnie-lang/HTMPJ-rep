@@ -53,3 +53,9 @@ python3 floorplan/build.py
 Instagram [@renoveru](https://www.instagram.com/renoveru/) のストーリーズ投稿の
 スクリーンショット（IMG_0182 / 0183 / 0185 / 0186 / 0187）より作図。
 本図は写真をもとに第三者が起こした非公式の推定図であり、実際の物件図面ではありません。
+
+---
+
+## 別の成果物
+
+- [`daytrip-atami/`](daytrip-atami/) — 熱海・初島の日帰りしおり（2026年9月13日・東京発）
