@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 430" font-family="'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">サウナの12分計の読み方</title>
+  <desc id="d">入ったとき黒い針が3にあり、8分入りたいなら3に8を足した11に来たら出る、という例。数字1つが1分。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e8750a"/>
+    </marker>
+  </defs>
+
+  <rect width="660" height="430" rx="16" fill="#fffaf3"/>
+
+  <!-- 8分ぶんの矢印（3 → 11、時計回り） -->
+  <path d="M380,210 A170,170 0 1 1 125,62.8" fill="none" stroke="#e8750a" stroke-width="6" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <text x="104" y="392" font-size="22" font-weight="700" fill="#b85400" text-anchor="middle">8分</text>
+
+  <!-- 文字盤 -->
+  <circle cx="210" cy="210" r="145" fill="#ffffff" stroke="#3a3a3a" stroke-width="5"/>
+  <g stroke="#9a9a9a" stroke-width="1.5">
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(6 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(12 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(18 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(24 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(36 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(42 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(48 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(54 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(66 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(72 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(78 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(84 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(96 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(102 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(108 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(114 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(126 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(132 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(138 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(144 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(156 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(162 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(168 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(174 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(186 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(192 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(198 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(204 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(216 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(222 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(228 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(234 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(246 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(252 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(258 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(264 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(276 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(282 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(288 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(294 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(306 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(312 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(318 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(324 210 210)"/>
+    <line x1="210" y1="72" x2="210" y2="78" transform="rotate(336 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(342 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(348 210 210)"/><line x1="210" y1="72" x2="210" y2="78" transform="rotate(354 210 210)"/>
+  </g>
+  <g stroke="#3a3a3a" stroke-width="3.5">
+    <line x1="210" y1="70" x2="210" y2="84"/>
+    <line x1="210" y1="70" x2="210" y2="84" transform="rotate(30 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(60 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(90 210 210)"/>
+    <line x1="210" y1="70" x2="210" y2="84" transform="rotate(120 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(150 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(180 210 210)"/>
+    <line x1="210" y1="70" x2="210" y2="84" transform="rotate(210 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(240 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(270 210 210)"/>
+    <line x1="210" y1="70" x2="210" y2="84" transform="rotate(300 210 210)"/><line x1="210" y1="70" x2="210" y2="84" transform="rotate(330 210 210)"/>
+  </g>
+
+  <!-- 入った数字（3）と出る数字（11）の丸 -->
+  <circle cx="318" cy="210" r="17" fill="#dbe9ff" stroke="#2f6fd6" stroke-width="3"/>
+  <circle cx="156" cy="116.5" r="17" fill="#ffe3c7" stroke="#e8750a" stroke-width="3"/>
+
+  <!-- 数字（数字1つ＝1分） -->
+  <g font-size="24" font-weight="700" fill="#2a2a2a" text-anchor="middle" dominant-baseline="central">
+    <text x="210" y="102">12</text>
+    <text x="264" y="116.5">1</text>
+    <text x="303.5" y="156">2</text>
+    <text x="318" y="210">3</text>
+    <text x="303.5" y="264">4</text>
+    <text x="264" y="303.5">5</text>
+    <text x="210" y="318">6</text>
+    <text x="156" y="303.5">7</text>
+    <text x="116.5" y="264">8</text>
+    <text x="102" y="210">9</text>
+    <text x="116.5" y="156">10</text>
+    <text x="156" y="116.5">11</text>
+  </g>
+
+  <!-- 黒い針（12分で1周）：入ったときに3を指している -->
+  <line x1="210" y1="210" x2="292" y2="210" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="210" cy="210" r="9" fill="#1a1a1a"/>
+
+  <!-- 吹き出し -->
+  <text x="398" y="216" font-size="16" fill="#2f6fd6" font-weight="700">← 入ったとき</text>
+  <text x="172" y="34" font-size="16" fill="#b85400" font-weight="700" text-anchor="end">ここに来たら出る ↓</text>
+
+  <!-- 説明 -->
+  <g font-size="18" fill="#2a2a2a">
+    <text x="420" y="92" font-size="21" font-weight="700">12分計の読み方</text>
+    <text x="420" y="130">数字1つ ＝ <tspan font-weight="700">1分</tspan></text>
+    <text x="420" y="160">黒い針：12分で1周</text>
+    <text x="420" y="190">赤い針：1分で1周</text>
+    <text x="420" y="282" font-weight="700">例：8分入りたい</text>
+    <text x="420" y="312">入ったとき <tspan fill="#2f6fd6" font-weight="700">3</tspan></text>
+    <text x="420" y="342">3 ＋ 8 ＝ <tspan fill="#b85400" font-weight="700">11</tspan></text>
+    <text x="420" y="372"><tspan fill="#b85400" font-weight="700">11</tspan> に来たら出る</text>
+  </g>
+</svg>
